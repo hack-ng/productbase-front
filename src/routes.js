@@ -1,3 +1,4 @@
+import Home from "views/Home.jsx"
 import Index from "views/Index.jsx";
 import Profile from "views/examples/Profile.jsx";
 import Maps from "views/examples/Maps.jsx";
@@ -7,6 +8,13 @@ import Tables from "views/examples/Tables.jsx";
 import Icons from "views/examples/Icons.jsx";
 
 var routes = [
+  {
+    path: "/",
+    name: "Home",
+    icon: "ni ni-tv-2 text-primary",
+    component: Home,
+    layout: "/"
+  },
   {
     path: "/index",
     name: "Dashboard",

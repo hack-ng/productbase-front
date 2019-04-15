@@ -12,20 +12,22 @@ import "assets/scss/argon-dashboard-react.scss";
 
 import AdminLayout from "layouts/Admin.jsx";
 import AuthLayout from "layouts/Auth.jsx";
+import HomeLayout from "layouts/Home.jsx"
 
 const store = configureStore()
 
 const Index = () => (
   <Provider store={store}>
-  <BrowserRouter>
-    <Switch>
-      <Route path="/admin" render={props => <AdminLayout {...props} />} />
-      <Route path="/auth" render={props => <AuthLayout {...props} />} />
-      <Redirect from="/" to="/admin/index" />
-    </Switch>
-  </BrowserRouter>
+    <BrowserRouter>
+      <Switch>
+        <Route path="/admin" render={props => <AdminLayout {...props} />} />
+        <Route path="/auth" render={props => <AuthLayout {...props} />} />
+        <Route path="/" render={props => <HomeLayout {...props} />} />
+        {/* <Redirect from="/" to="/admin/index" /> */}
+      </Switch>
+    </BrowserRouter>
   </Provider>
-)
+);
 
 ReactDOM.render(
   <Index />,
