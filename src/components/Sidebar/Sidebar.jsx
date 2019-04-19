@@ -64,6 +64,13 @@ class Sidebar extends React.Component {
   // creates the links that appear in the left menu / Sidebar
   createLinks = routes => {
     return routes.map((prop, key) => {
+      if (
+        prop.name == "Home" ||
+        prop.name == "Login" ||
+        prop.name == "Register"
+      ) {
+        return;
+      }
       return (
         <NavItem key={key}>
           <NavLink
@@ -99,7 +106,7 @@ class Sidebar extends React.Component {
         expand="md"
         id="sidenav-main"
       >
-        <Container fluid>
+        <Container className="justify-content-start" fluid>
           {/* Toggler */}
           <button
             className="navbar-toggler"
@@ -111,15 +118,11 @@ class Sidebar extends React.Component {
           {/* Brand */}
           {logo ? (
             <NavbarBrand className="pt-0" {...navbarBrandProps}>
-              <img
-                alt={logo.imgAlt}
-                className="navbar-brand-img"
-                src={logo.imgSrc}
-              />
+              <h1 class="text-dark mb-0">ProductBase</h1>
             </NavbarBrand>
           ) : null}
           {/* User */}
-          <Nav className="align-items-center d-md-none">
+          {/* <Nav className="align-items-center d-md-none">
             <UncontrolledDropdown nav>
               <DropdownToggle nav className="nav-link-icon">
                 <i className="ni ni-bell-55" />
@@ -167,31 +170,24 @@ class Sidebar extends React.Component {
                   <span>Support</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                <DropdownItem
+                  href="#pablo"
+                  onClick={e => e.preventDefault()}
+                >
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
-          </Nav>
+          </Nav> */}
           {/* Collapse */}
           <Collapse navbar isOpen={this.state.collapseOpen}>
             {/* Collapse header */}
             <div className="navbar-collapse-header d-md-none">
               <Row>
-                {logo ? (
-                  <Col className="collapse-brand" xs="6">
-                    {logo.innerLink ? (
-                      <Link to={logo.innerLink}>
-                        <img alt={logo.imgAlt} src={logo.imgSrc} />
-                      </Link>
-                    ) : (
-                      <a href={logo.outterLink}>
-                        <img alt={logo.imgAlt} src={logo.imgSrc} />
-                      </a>
-                    )}
-                  </Col>
-                ) : null}
+                <Col className="collapse-brand" xs="6">
+                  <h1 class="text-dark mb-0">ProductBase</h1>
+                </Col>
                 <Col className="collapse-close" xs="6">
                   <button
                     className="navbar-toggler"
@@ -205,7 +201,7 @@ class Sidebar extends React.Component {
               </Row>
             </div>
             {/* Form */}
-            <Form className="mt-4 mb-3 d-md-none">
+            {/* <Form className="mt-4 mb-3 d-md-none">
               <InputGroup className="input-group-rounded input-group-merge">
                 <Input
                   aria-label="Search"
@@ -219,15 +215,15 @@ class Sidebar extends React.Component {
                   </InputGroupText>
                 </InputGroupAddon>
               </InputGroup>
-            </Form>
+            </Form> */}
             {/* Navigation */}
             <Nav navbar>{this.createLinks(routes)}</Nav>
             {/* Divider */}
-            <hr className="my-3" />
+            {/* <hr className="my-3" /> */}
             {/* Heading */}
-            <h6 className="navbar-heading text-muted">Documentation</h6>
+            {/* <h6 className="navbar-heading text-muted">Documentation</h6> */}
             {/* Navigation */}
-            <Nav className="mb-md-3" navbar>
+            {/* <Nav className="mb-md-3" navbar>
               <NavItem>
                 <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/documentation/overview?ref=adr-admin-sidebar">
                   <i className="ni ni-spaceship" />
@@ -246,7 +242,7 @@ class Sidebar extends React.Component {
                   Components
                 </NavLink>
               </NavItem>
-            </Nav>
+            </Nav> */}
           </Collapse>
         </Container>
       </Navbar>

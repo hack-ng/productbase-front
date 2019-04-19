@@ -34,7 +34,7 @@ class Home extends React.Component {
   render() {
     return (
       <>
-        <Col lg="6" md="8" className="mb-4">
+        <Col lg="6" md="8" sm="10" className="mb-4 mx-4">
           <Form className="navbar-search navbar-search-dark form-group mx-auto mr-3">
             <FormGroup className="mb-0">
               <InputGroup className="input-group-alternative">
