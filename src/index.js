@@ -22,8 +22,8 @@ const Index = () => (
       <Switch>
         <Route path="/admin" render={props => <AdminLayout {...props} />} />
         <Route path="/auth" render={props => <AuthLayout {...props} />} />
+        <Redirect from="/admin" to="/admin/index/" />
         <Route path="/" render={props => <HomeLayout {...props} />} />
-        {/* <Redirect from="/" to="/admin/index" /> */}
       </Switch>
     </BrowserRouter>
   </Provider>
