@@ -4,6 +4,10 @@ import React from "react";
 import {
   Badge,
   Card,
+  Form,
+  FormGroup,
+  Input,
+  Col,
   CardHeader,
   CardFooter,
   DropdownMenu,
@@ -18,6 +22,8 @@ import {
   Table,
   Container,
   Row,
+  Button,
+  CardBody,
   UncontrolledTooltip
 } from "reactstrap";
 // core components
@@ -30,6 +36,222 @@ class CreateEntry extends React.Component {
         <Header hideSummary={true} />
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <Row className="mb-5">
+            <Col xl="10">
+              <Card className="bg-secondary shadow">
+                <CardHeader className="bg-white border-0">
+                  <Row className="align-items-center">
+                    <Col xs="8">
+                      <h3 className="mb-0">Add Product</h3>
+                    </Col>
+                    <Col className="text-right" xs="4">
+                      <Button
+                        color="primary"
+                        href="#pablo"
+                        onClick={e => e.preventDefault()}
+                        size="sm"
+                      >
+                        Add
+                      </Button>
+                    </Col>
+                  </Row>
+                </CardHeader>
+                <CardBody>
+                  <Form>
+                    <h6 className="heading-small text-muted mb-4">
+                      Product Information
+                    </h6>
+                    <div className="pl-lg-4">
+                      <Row>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-username"
+                            >
+                              Product Name
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              defaultValue="lucky.jesse"
+                              id="input-username"
+                              placeholder="Username"
+                              type="text"
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-email"
+                            >
+                              Product Code
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              id="input-email"
+                              placeholder="jesse@example.com"
+                              type="email"
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-first-name"
+                            >
+                              First name
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              defaultValue="Lucky"
+                              id="input-first-name"
+                              placeholder="First name"
+                              type="text"
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-last-name"
+                            >
+                              Last name
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              defaultValue="Jesse"
+                              id="input-last-name"
+                              placeholder="Last name"
+                              type="text"
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="12">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="product-description"
+                            >
+                              Product Description
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              placeholder="A few words about you ..."
+                              rows="4"
+                              id="product-description"
+                              defaultValue="Product Description"
+                              type="textarea"
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                    </div>
+                    <hr className="my-4" />
+                    {/* Address */}
+                    <h6 className="heading-small text-muted mb-4">
+                      Manufacturer information
+                    </h6>
+                    <div className="pl-lg-4">
+                      <Row>
+                        <Col md="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-address"
+                            >
+                              Name
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              defaultValue="Johnny Ventures"
+                              id="input-address"
+                              placeholder="Home Address"
+                              type="text"
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col md="6">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-address"
+                            >
+                              Country
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              defaultValue="Nigeria"
+                              id="input-address"
+                              placeholder="Country"
+                              type="text"
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col lg="4">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-city"
+                            >
+                              City
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              defaultValue="New York"
+                              id="input-city"
+                              placeholder="City"
+                              type="text"
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="4">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-country"
+                            >
+                              Country
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              defaultValue="United States"
+                              id="input-country"
+                              placeholder="Country"
+                              type="text"
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col lg="4">
+                          <FormGroup>
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-country"
+                            >
+                              Postal code
+                            </label>
+                            <Input
+                              className="form-control-alternative"
+                              id="input-postal-code"
+                              placeholder="Postal code"
+                              type="number"
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                    </div>
+                  </Form>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
           {/* Table */}
           <Row>
             <div className="col">
