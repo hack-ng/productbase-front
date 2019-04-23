@@ -190,17 +190,45 @@ class CreateEntry extends React.Component {
 
   render() {
     return (
-      <>
+      <React.Fragment>
         <Header hideSummary={true} />
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row className="mb-5">
             <Col xl="10">
               <Card className="bg-secondary shadow">
-                <CardHeader onClick={this.toggleAddForm} className="bg-white border-0">
+                <CardHeader
+                  onClick={this.toggleAddForm}
+                  className="bg-white border-0"
+                >
+                  <Row className="align-items-center">
+                    <Col className="">
+                      <h3 className="mb-2">Upload Spreadsheet</h3>
+                      <Input
+                        type="file"
+                        className="mb-4"
+
+                      />
+                      <Button color="primary" size="sm">
+                        Upload
+                      </Button>
+                    </Col>
+                  </Row>
+                </CardHeader>
+                
+                </Card>
+            </Col>
+          </Row>
+          <Row className="mb-5">
+            <Col xl="10">
+              <Card className="bg-secondary shadow">
+                <CardHeader
+                  onClick={this.toggleAddForm}
+                  className="bg-white border-0"
+                >
                   <Row className="align-items-center">
                     <Col xs="8">
-                      <h3 className="mb-0">Add Product</h3>
+                      <h3 className="mb-0">Add Product manually</h3>
                     </Col>
                     <Col className="text-right" xs="4">
                       <Button
@@ -669,7 +697,7 @@ class CreateEntry extends React.Component {
           </Row>
           {this.renderModal()}
         </Container>
-      </>
+      </React.Fragment>
     );
   }
 }

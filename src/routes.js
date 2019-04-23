@@ -45,13 +45,13 @@ var routes = [
   //   component: Profile,
   //   layout: "/admin"
   // },
-  {
-    path: "/icons",
-    name: "Icons",
-    icon: "ni ni-planet text-blue",
-    component: Icons,
-    layout: "/admin"
-  },
+  // {
+  //   path: "/icons",
+  //   name: "Icons",
+  //   icon: "ni ni-planet text-blue",
+  //   component: Icons,
+  //   layout: "/admin"
+  // },
   {
     path: "/login",
     name: "Login",
