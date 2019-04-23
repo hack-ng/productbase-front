@@ -172,7 +172,6 @@ class Entries extends React.Component {
                     <Col className="text-right" xs="4">
                       <Button
                         color="success"
-                        href="#pablo"
                         onClick={e => e.preventDefault()}
                         size="sm"
                       >
