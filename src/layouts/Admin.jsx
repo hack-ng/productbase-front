@@ -7,6 +7,8 @@ import AdminNavbar from "components/Navbars/AdminNavbar.jsx";
 import AdminFooter from "components/Footers/AdminFooter.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 
+import Index from "views/Index.jsx";
+
 import routes from "routes.js";
 
 class Admin extends React.Component {
@@ -59,7 +61,13 @@ class Admin extends React.Component {
             {...this.props}
             brandText={this.getBrandText(this.props.location.pathname)}
           />
-          <Switch>{this.getRoutes(routes)}</Switch>
+          <Switch>
+            {this.getRoutes(routes)}
+            <Route
+              path='/admin'
+              component={Index}
+            />
+          </Switch>
           <Container fluid>
             <AdminFooter />
           </Container>
