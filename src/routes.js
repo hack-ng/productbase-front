@@ -6,6 +6,7 @@ import Register from "views/examples/Register.jsx";
 import Login from "views/examples/Login.jsx";
 import Entries from "views/Entries.jsx";
 import CreateEntry from  "views/CreateEntry.jsx"
+import ManageKeys from "views/ManageKeys.jsx";
 import Icons from "views/examples/Icons.jsx";
 
 var routes = [
@@ -19,39 +20,38 @@ var routes = [
   {
     path: "/create-entry",
     name: "Create Entry",
-    icon: " ni ni-fat-add text-red",
+    icon: " ni ni-fat-add text-primary",
     component: CreateEntry,
     layout: "/admin"
   },
   {
     path: "/entries",
     name: "Entries",
-    icon: "ni ni-bullet-list-67 text-red",
+    icon: "ni ni-bullet-list-67 text-primary",
     component: Entries,
     layout: "/admin"
   },
-
   {
-    path: "/icons",
-    name: "Icons",
-    icon: "ni ni-planet text-blue",
-    component: Icons,
+    path: "/manage-keys",
+    name: "Manage API Keys",
+    icon: "ni ni-key-25 text-primary",
+    component: ManageKeys,
     layout: "/admin"
   },
   // {
-  //   path: "/maps",
-  //   name: "Maps",
-  //   icon: "ni ni-pin-3 text-orange",
-  //   component: Maps,
+  //   path: "/user-profile",
+  //   name: "User Profile",
+  //   icon: "ni ni-single-02 text-primary",
+  //   component: Profile,
   //   layout: "/admin"
   // },
-  {
-    path: "/user-profile",
-    name: "User Profile",
-    icon: "ni ni-single-02 text-yellow",
-    component: Profile,
-    layout: "/admin"
-  },
+  // {
+  //   path: "/icons",
+  //   name: "Icons",
+  //   icon: "ni ni-planet text-blue",
+  //   component: Icons,
+  //   layout: "/admin"
+  // },
   {
     path: "/login",
     name: "Login",
