@@ -5,6 +5,7 @@ import ReactDatetime from "react-datetime";
 import {
   Badge,
   Card,
+  Collapse,
   Form,
   FormGroup,
   Input,
@@ -38,13 +39,19 @@ const categories = [
 
 class CreateEntry extends React.Component {
   state = {
-    defaultModal: false
+    defaultModal: false,
+    showAddForm: false
   };
   toggleModal = state => {
     this.setState({
       [state]: !this.state[state]
     });
   };
+
+  toggleAddForm = () => {
+    const oldVal = this.state.showAddForm;
+    this.setState({showAddForm: !oldVal})
+  }
 
   renderModal = () => {
     return (
@@ -190,7 +197,7 @@ class CreateEntry extends React.Component {
           <Row className="mb-5">
             <Col xl="10">
               <Card className="bg-secondary shadow">
-                <CardHeader className="bg-white border-0">
+                <CardHeader onClick={this.toggleAddForm} className="bg-white border-0">
                   <Row className="align-items-center">
                     <Col xs="8">
                       <h3 className="mb-0">Add Product</h3>
@@ -207,304 +214,308 @@ class CreateEntry extends React.Component {
                     </Col>
                   </Row>
                 </CardHeader>
-                <CardBody>
-                  <Form>
-                    <h6 className="heading-small text-muted mb-4">
-                      Product Information
-                    </h6>
-                    <div className="pl-lg-4">
-                      <Row>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="name"
-                            >
-                              Product Name
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="name"
-                              placeholder="Product Name"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="code"
-                            >
-                              Product Code
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="code"
-                              placeholder="Product Code"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col lg="3">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="sizeSelect"
-                            >
-                              Size
-                            </label>
-                            <Input
-                              type="select"
-                              className="form-control-alternative"
-                              name="size"
-                              id="sizeSelect"
-                            >
-                              <option value="">-----</option>
-                              <option value="S">Small</option>
-                              <option value="M">Medium</option>
-                              <option value="L">Large</option>
-                              <option value="XL">Extra Large</option>
-                              <option value="XXL">Extra Extra Large</option>
-                            </Input>
-                          </FormGroup>
-                        </Col>
-                        <Col lg="3">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="weight"
-                            >
-                              Weight
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="weight"
-                              placeholder="Weight"
-                              type="number"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="3">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="shape"
-                            >
-                              Shape
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="shape"
-                              placeholder="Product Shape"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col sm="6" lg="3">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="color"
-                            >
-                              Color
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="color"
-                              placeholder="Product Color"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label htmlFor="exampleSelectMulti">
-                              Categories
-                            </label>
-                            <Select options={categories} isMulti />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label htmlFor="product-image">
-                              Product Image
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="product-image"
-                              name="image"
-                              type="file"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="12">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="product-description"
-                            >
-                              Product Description
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              placeholder="Product Description"
-                              rows="4"
-                              id="product-description"
-                              type="textarea"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </div>
-                    <hr className="my-4" />
-                    {/* Address */}
-                    <h6 className="heading-small text-muted mb-4">
-                      Manufacturer information
-                    </h6>
-                    <div className="pl-lg-4">
-                      <Row>
-                        <Col md="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-address"
-                            >
-                              Name
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="Johnny Ventures"
-                              id="input-address"
-                              placeholder="Home Address"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col md="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="man-email"
-                            >
-                              Email
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="Nigeria"
-                              id="man-email"
-                              placeholder="Email"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="man-country"
-                            >
-                              Country
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="man-country"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="man-phone_number"
-                            >
-                              Phone Number
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="man-phone_number"
-                              placeholder=""
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="man-website"
-                            >
-                              Website
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="man-website"
-                              placeholder="Manufacturer website"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="reg-code"
-                            >
-                              Registration Code
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="reg-code"
-                              placeholder="Registration Code"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="man-reg-year"
-                            >
-                              Registration Year
-                            </label>
-                            <InputGroup className="input-group-alternative">
-                              <ReactDatetime
-                                inputProps={{
-                                  placeholder: "Date Picker Here",
-                                  id: "man-reg-year"
-                                }}
-                                timeFormat={false}
+                <Collapse isOpen={this.state.showAddForm}>
+                  <CardBody>
+                    <Form>
+                      <h6 className="heading-small text-muted mb-4">
+                        Product Information
+                      </h6>
+                      <div className="pl-lg-4">
+                        <Row>
+                          <Col lg="6">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="name"
+                              >
+                                Product Name
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                id="name"
+                                placeholder="Product Name"
+                                type="text"
                               />
-                            </InputGroup>
-                          </FormGroup>
-                        </Col>
-                        <Col lg="12">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="man-address"
-                            >
-                              Address
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              placeholder="Manufacturer's address"
-                              rows="3"
-                              id="man-address"
-                              type="textarea"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </div>
-                  </Form>
-                </CardBody>
+                            </FormGroup>
+                          </Col>
+                          <Col lg="6">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="code"
+                              >
+                                Product Code
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                id="code"
+                                placeholder="Product Code"
+                                type="text"
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg="3">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="sizeSelect"
+                              >
+                                Size
+                              </label>
+                              <Input
+                                type="select"
+                                className="form-control-alternative"
+                                name="size"
+                                id="sizeSelect"
+                              >
+                                <option value="">-----</option>
+                                <option value="S">Small</option>
+                                <option value="M">Medium</option>
+                                <option value="L">Large</option>
+                                <option value="XL">Extra Large</option>
+                                <option value="XXL">
+                                  Extra Extra Large
+                                </option>
+                              </Input>
+                            </FormGroup>
+                          </Col>
+                          <Col lg="3">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="weight"
+                              >
+                                Weight
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                id="weight"
+                                placeholder="Weight"
+                                type="number"
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg="3">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="shape"
+                              >
+                                Shape
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                id="shape"
+                                placeholder="Product Shape"
+                                type="text"
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col sm="6" lg="3">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="color"
+                              >
+                                Color
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                id="color"
+                                placeholder="Product Color"
+                                type="text"
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg="6">
+                            <FormGroup>
+                              <label htmlFor="exampleSelectMulti">
+                                Categories
+                              </label>
+                              <Select options={categories} isMulti />
+                            </FormGroup>
+                          </Col>
+                          <Col lg="6">
+                            <FormGroup>
+                              <label htmlFor="product-image">
+                                Product Image
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                id="product-image"
+                                name="image"
+                                type="file"
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg="12">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="product-description"
+                              >
+                                Product Description
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                placeholder="Product Description"
+                                rows="4"
+                                id="product-description"
+                                type="textarea"
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                      </div>
+                      <hr className="my-4" />
+                      {/* Address */}
+                      <h6 className="heading-small text-muted mb-4">
+                        Manufacturer information
+                      </h6>
+                      <div className="pl-lg-4">
+                        <Row>
+                          <Col md="6">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-address"
+                              >
+                                Name
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                defaultValue="Johnny Ventures"
+                                id="input-address"
+                                placeholder="Home Address"
+                                type="text"
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col md="6">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="man-email"
+                              >
+                                Email
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                defaultValue="Nigeria"
+                                id="man-email"
+                                placeholder="Email"
+                                type="text"
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg="4">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="man-country"
+                              >
+                                Country
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                id="man-country"
+                                type="text"
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg="4">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="man-phone_number"
+                              >
+                                Phone Number
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                id="man-phone_number"
+                                placeholder=""
+                                type="text"
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg="4">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="man-website"
+                              >
+                                Website
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                id="man-website"
+                                placeholder="Manufacturer website"
+                                type="text"
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg="6">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="reg-code"
+                              >
+                                Registration Code
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                id="reg-code"
+                                placeholder="Registration Code"
+                                type="text"
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg="6">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="man-reg-year"
+                              >
+                                Registration Year
+                              </label>
+                              <InputGroup className="input-group-alternative">
+                                <ReactDatetime
+                                  inputProps={{
+                                    placeholder: "Date Picker Here",
+                                    id: "man-reg-year"
+                                  }}
+                                  timeFormat={false}
+                                />
+                              </InputGroup>
+                            </FormGroup>
+                          </Col>
+                          <Col lg="12">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="man-address"
+                              >
+                                Address
+                              </label>
+                              <Input
+                                className="form-control-alternative"
+                                placeholder="Manufacturer's address"
+                                rows="3"
+                                id="man-address"
+                                type="textarea"
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                      </div>
+                    </Form>
+                  </CardBody>
+                </Collapse>
               </Card>
             </Col>
           </Row>
