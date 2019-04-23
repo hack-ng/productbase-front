@@ -1,11 +1,7 @@
 import React from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
-// javascipt plugin for creating charts
-import Chart from "chart.js";
-// react plugin used to create charts
-import { Line, Bar } from "react-chartjs-2";
-// reactstrap components
+
 import {
   Button,
   Card,
@@ -21,13 +17,7 @@ import {
   Col
 } from "reactstrap";
 
-// core components
-import {
-  chartOptions,
-  parseOptions,
-  chartExample1,
-  chartExample2
-} from "variables/charts.jsx";
+import { Link } from "react-router-dom";
 
 import Header from "components/Headers/Header.jsx";
 
@@ -36,9 +26,7 @@ class Index extends React.Component {
     activeNav: 1,
     chartExample1Data: "data1"
   };
-  componentWillMount() {
-   
-  }
+  componentWillMount() {}
   render() {
     return (
       <>
@@ -53,21 +41,15 @@ class Index extends React.Component {
                       <h3 className="mb-0">Recent Entries</h3>
                     </Col>
                     <Col className="text-right" xs="4">
-                      <Button
-                        color="info"
-                        href="#pablo"
-                        onClick={e => e.preventDefault()}
-                        size="sm"
-                      >
-                        View all &rarr;
-                      </Button>
+                      <Link to="/admin/entries">
+                        <Button color="info" size="sm">
+                          View all &rarr;
+                        </Button>
+                      </Link>
                     </Col>
                   </Row>
                 </CardHeader>
-                <Table
-                  className="align-items-center table-flush"
-                  responsive
-                >
+                <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">
                     <tr>
                       <th scope="col">Author</th>

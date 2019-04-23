@@ -15,9 +15,7 @@ import {
   Row,
   UncontrolledTooltip,
   PaginationItem,
-  Media,
-  Badge,
-  DropdownItem,
+  Modal,
   PaginationLink,
   Table,
   CardFooter,
@@ -31,19 +29,164 @@ import {
 } from "reactstrap";
 
 class Home extends React.Component {
+  state = {
+    defaultModal: false,
+  };
+  toggleModal = state => {
+    this.setState({
+      [state]: !this.state[state]
+    });
+  };
+
+  renderModal = () => {
+    return (
+      <Modal
+        size="lg"
+        isOpen={this.state.defaultModal}
+        toggle={() => this.toggleModal("defaultModal")}
+      >
+        <div className="modal-header">
+          <h3 className="modal-title" id="modal-title-default">
+            Yoruba Book
+          </h3>
+          <button
+            aria-label="Close"
+            className="close"
+            data-dismiss="modal"
+            type="button"
+            onClick={() => this.toggleModal("defaultModal")}
+          >
+            <span aria-hidden={true}>×</span>
+          </button>
+        </div>
+        <div className="modal-body">
+          <Row>
+            <Col className="text-center mb-3" lg={3}>
+              <img
+                src="https://images.menswearhouse.com/is/image/TMW/MW40_57V0_23_JOSEPH_ABBOUD_VOYAGER_LT_BLUE_OVAL_SET?$40MainPDP$&fmt=webp"
+                style={{ width: 150, height: 150 }}
+              />
+            </Col>
+
+            <Col lg={9}>
+              <Row className="mb-3">
+                <Col xs="7">
+                  <h4 className="">Product Name</h4>
+                  <span>Yoruba Book</span>
+                </Col>
+                <Col xs="5">
+                  <h4 className="">Code</h4>
+                  <span>1012</span>
+                </Col>
+              </Row>
+              <Row className="mb-3">
+                <Col xs="4" md={3}>
+                  <h4 className="">Size</h4>
+                  <span>Small</span>
+                </Col>
+                <Col xs="4" md={3}>
+                  <h4 className="">Weight</h4>
+                  <span>1.3g</span>
+                </Col>
+                <Col xs="4" md={3}>
+                  <h4 className="">Shape</h4>
+                  <span>N/A</span>
+                </Col>
+                <Col xs="4" md={3}>
+                  <h4 className="">Color</h4>
+                  <span>Grey</span>
+                </Col>
+              </Row>
+
+              <div className="">
+                <h4 className="">Description</h4>
+                <p>
+                  lNisi do ad et fugiat cupidatat esse exercitation nostrud
+                  ipsum. Occaecat sunt quis adipisicing cillum velit
+                  exercitation cillum dolor. Ex commodo nisi anim sit dolore
+                  elit fugiat ipsum.
+                </p>
+              </div>
+              <hr />
+
+              <Row className="mb-3">
+                <Col>
+                  <h4>Manufacturer's Name</h4>
+                  <p> Illinois </p>
+                </Col>
+              </Row>
+              <Row className="mb-3">
+                <Col xs={6}>
+                  <h4>Country</h4>
+                  <p> Illinois </p>
+                </Col>
+                <Col md={6}>
+                  <h4>Email Address</h4>
+                  <p> company@gmail.com </p>
+                </Col>
+                <Col md={6}>
+                  <h4>Mobile Number</h4>
+                  <p> +2347036732678 </p>
+                </Col>
+                <Col md={6}>
+                  <h4>Website</h4>
+                  <p> www.company.com </p>
+                </Col>
+              </Row>
+              <Row className="mb-3">
+                <Col md={6}>
+                  <h4>Reg Code</h4>
+                  <p> 12232DFD </p>
+                </Col>
+                <Col md={6}>
+                  <h4>Reg Year</h4>
+                  <p> 04/15/2019 </p>
+                </Col>
+              </Row>
+
+              <Row className="mb-3">
+                <Col>
+                  <h4>Address</h4>
+                  <p>15 Uptown Funk, Lasgidi</p>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </div>
+        <div className="modal-footer">
+          <Button color="primary" type="button">
+            Edit
+          </Button>
+          <Button
+            className="ml-auto"
+            color="link"
+            data-dismiss="modal"
+            type="button"
+            onClick={() => this.toggleModal("defaultModal")}
+          >
+            Close
+          </Button>
+        </div>
+      </Modal>
+    );
+  };
+
   render() {
     return (
       <>
-        <Col lg="6" md="8" sm="10" className="mb-4 mx-4">
-          <Form className="navbar-search navbar-search-dark form-group mx-auto mr-3">
+        <Col lg="6" md="8" sm="10" className="mb-4 mx-auto">
+          <Form className="mx-3">
             <FormGroup className="mb-0">
               <InputGroup className="input-group-alternative">
+                <Input
+                  placeholder="Search Product Name or Manufacturer"
+                  type="text"
+                />
                 <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
+                  <Button color="success" onClick={e => e.preventDefault()}>
                     <i className="fas fa-search" />
-                  </InputGroupText>
+                  </Button>
                 </InputGroupAddon>
-                <Input placeholder="Search Product Name or Manufacturer" type="text" />
               </InputGroup>
             </FormGroup>
           </Form>
@@ -58,436 +201,29 @@ class Home extends React.Component {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Product</th>
+                    <th scope="col">Product image</th>
+                    <th scope="col">Name</th>
                     <th scope="col">Code</th>
                     <th scope="col">Manufacturer</th>
                     <th scope="col">Categories</th>
-                    <th scope="col">Actions</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <th scope="row">
-                      <Media className="align-items-center">
-                        <a
-                          className="avatar rounded-circle mr-3"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <img
-                            alt="..."
-                            src={require("assets/img/theme/bootstrap.jpg")}
-                          />
-                        </a>
-                        <Media>
-                          <span className="mb-0 text-sm">
-                            Argon Design System
-                          </span>
-                        </Media>
-                      </Media>
-                    </th>
-                    <td>$2,500 USD</td>
                     <td>
-                      <Badge color="" className="badge-dot mr-4">
-                        <i className="bg-warning" />
-                        pending
-                      </Badge>
+                      <img
+                        style={{ width: 80, height: 80 }}
+                        alt="..."
+                        src="https://images.menswearhouse.com/is/image/TMW/MW40_57V0_23_JOSEPH_ABBOUD_VOYAGER_LT_BLUE_OVAL_SET?$40MainPDP$&fmt=webp"
+                      />
                     </td>
-                    <td>
-                      <div className="avatar-group">
-                        <a
-                          className="avatar avatar-sm"
-                          href="#pablo"
-                          id="tooltip742438047"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <img
-                            alt="..."
-                            className="rounded-circle"
-                            src={require("assets/img/theme/team-1-800x800.jpg")}
-                          />
-                        </a>
-                        <UncontrolledTooltip
-                          delay={0}
-                          target="tooltip742438047"
-                        >
-                          Ryan Tompson
-                        </UncontrolledTooltip>
-                        
-                      </div>
-                    </td>
-                    
+                    <td>Yoruba Book</td>
+                    <td>0012</td>
+                    <td>Eastern Illinois University</td>
+                    <td>Wears and Accesories</td>
                     <td className="text-right">
-                      <UncontrolledDropdown>
-                        <DropdownToggle
-                          className="btn-icon-only text-light"
-                          href="#pablo"
-                          role="button"
-                          size="sm"
-                          color=""
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fas fa-ellipsis-v" />
-                        </DropdownToggle>
-                        <DropdownMenu className="dropdown-menu-arrow" right>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Action
-                          </DropdownItem>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Another action
-                          </DropdownItem>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Something else here
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </UncontrolledDropdown>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                      <Media className="align-items-center">
-                        <a
-                          className="avatar rounded-circle mr-3"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <img
-                            alt="..."
-                            src={require("assets/img/theme/angular.jpg")}
-                          />
-                        </a>
-                        <Media>
-                          <span className="mb-0 text-sm">
-                            Angular Now UI Kit PRO
-                          </span>
-                        </Media>
-                      </Media>
-                    </th>
-                    <td>$1,800 USD</td>
-                    <td>
-                      <Badge color="" className="badge-dot">
-                        <i className="bg-success" />
-                        completed
-                      </Badge>
-                    </td>
-                    <td>
-                      <div className="avatar-group">
-                        <a
-                          className="avatar avatar-sm"
-                          href="#pablo"
-                          id="tooltip746418347"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <img
-                            alt="..."
-                            className="rounded-circle"
-                            src={require("assets/img/theme/team-1-800x800.jpg")}
-                          />
-                        </a>
-                        <UncontrolledTooltip
-                          delay={0}
-                          target="tooltip746418347"
-                        >
-                          Ryan Tompson
-                        </UncontrolledTooltip>
-                        
-                      </div>
-                    </td>
-                    <td className="text-right">
-                      <UncontrolledDropdown>
-                        <DropdownToggle
-                          className="btn-icon-only text-light"
-                          href="#pablo"
-                          role="button"
-                          size="sm"
-                          color=""
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fas fa-ellipsis-v" />
-                        </DropdownToggle>
-                        <DropdownMenu className="dropdown-menu-arrow" right>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Action
-                          </DropdownItem>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Another action
-                          </DropdownItem>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Something else here
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </UncontrolledDropdown>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                      <Media className="align-items-center">
-                        <a
-                          className="avatar rounded-circle mr-3"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <img
-                            alt="..."
-                            src={require("assets/img/theme/sketch.jpg")}
-                          />
-                        </a>
-                        <Media>
-                          <span className="mb-0 text-sm">
-                            Black Dashboard
-                          </span>
-                        </Media>
-                      </Media>
-                    </th>
-                    <td>$3,150 USD</td>
-                    <td>
-                      <Badge color="" className="badge-dot mr-4">
-                        <i className="bg-danger" />
-                        delayed
-                      </Badge>
-                    </td>
-                    <td>
-                      <div className="avatar-group">
-                        <a
-                          className="avatar avatar-sm"
-                          href="#pablo"
-                          id="tooltip753056318"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <img
-                            alt="..."
-                            className="rounded-circle"
-                            src={require("assets/img/theme/team-1-800x800.jpg")}
-                          />
-                        </a>
-                        <UncontrolledTooltip
-                          delay={0}
-                          target="tooltip753056318"
-                        >
-                          Ryan Tompson
-                        </UncontrolledTooltip>
-                        </div>
-                    </td>
-                    <td className="text-right">
-                      <UncontrolledDropdown>
-                        <DropdownToggle
-                          className="btn-icon-only text-light"
-                          href="#pablo"
-                          role="button"
-                          size="sm"
-                          color=""
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fas fa-ellipsis-v" />
-                        </DropdownToggle>
-                        <DropdownMenu className="dropdown-menu-arrow" right>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Action
-                          </DropdownItem>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Another action
-                          </DropdownItem>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Something else here
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </UncontrolledDropdown>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                      <Media className="align-items-center">
-                        <a
-                          className="avatar rounded-circle mr-3"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <img
-                            alt="..."
-                            src={require("assets/img/theme/react.jpg")}
-                          />
-                        </a>
-                        <Media>
-                          <span className="mb-0 text-sm">
-                            React Material Dashboard
-                          </span>
-                        </Media>
-                      </Media>
-                    </th>
-                    <td>$4,400 USD</td>
-                    <td>
-                      <Badge color="" className="badge-dot">
-                        <i className="bg-info" />
-                        on schedule
-                      </Badge>
-                    </td>
-                    <td>
-                      <div className="avatar-group">
-                        <a
-                          className="avatar avatar-sm"
-                          href="#pablo"
-                          id="tooltip875258217"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <img
-                            alt="..."
-                            className="rounded-circle"
-                            src={require("assets/img/theme/team-1-800x800.jpg")}
-                          />
-                        </a>
-                        <UncontrolledTooltip
-                          delay={0}
-                          target="tooltip875258217"
-                        >
-                          Ryan Tompson
-                        </UncontrolledTooltip>
-                      </div>
-                    </td>
-                    <td className="text-right">
-                      <UncontrolledDropdown>
-                        <DropdownToggle
-                          className="btn-icon-only text-light"
-                          href="#pablo"
-                          role="button"
-                          size="sm"
-                          color=""
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fas fa-ellipsis-v" />
-                        </DropdownToggle>
-                        <DropdownMenu className="dropdown-menu-arrow" right>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Action
-                          </DropdownItem>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Another action
-                          </DropdownItem>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Something else here
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </UncontrolledDropdown>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                      <Media className="align-items-center">
-                        <a
-                          className="avatar rounded-circle mr-3"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <img
-                            alt="..."
-                            src={require("assets/img/theme/vue.jpg")}
-                          />
-                        </a>
-                        <Media>
-                          <span className="mb-0 text-sm">
-                            Vue Paper UI Kit PRO
-                          </span>
-                        </Media>
-                      </Media>
-                    </th>
-                    <td>$2,200 USD</td>
-                    <td>
-                      <Badge color="" className="badge-dot mr-4">
-                        <i className="bg-success" />
-                        completed
-                      </Badge>
-                    </td>
-                    <td>
-                      <div className="avatar-group">
-                        <a
-                          className="avatar avatar-sm"
-                          href="#pablo"
-                          id="tooltip664029969"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <img
-                            alt="..."
-                            className="rounded-circle"
-                            src={require("assets/img/theme/team-1-800x800.jpg")}
-                          />
-                        </a>
-                        <UncontrolledTooltip
-                          delay={0}
-                          target="tooltip664029969"
-                        >
-                          Ryan Tompson
-                        </UncontrolledTooltip>
-                      </div>
-                    </td>
-                    <td className="text-right">
-                      <UncontrolledDropdown>
-                        <DropdownToggle
-                          className="btn-icon-only text-light"
-                          href="#pablo"
-                          role="button"
-                          size="sm"
-                          color=""
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fas fa-ellipsis-v" />
-                        </DropdownToggle>
-                        <DropdownMenu className="dropdown-menu-arrow" right>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Action
-                          </DropdownItem>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Another action
-                          </DropdownItem>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                          >
-                            Something else here
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </UncontrolledDropdown>
+                      <Button onClick={() => {this.toggleModal("defaultModal")}} color="primary"> View </Button>
                     </td>
                   </tr>
                 </tbody>
@@ -547,6 +283,7 @@ class Home extends React.Component {
             </Card>
           </div>
         </Col>
+        {this.renderModal()}
       </>
     );
   }
