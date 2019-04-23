@@ -36,24 +36,8 @@ class Index extends React.Component {
     activeNav: 1,
     chartExample1Data: "data1"
   };
-  toggleNavs = (e, index) => {
-    e.preventDefault();
-    this.setState({
-      activeNav: index,
-      chartExample1Data:
-        this.state.chartExample1Data === "data1" ? "data2" : "data1"
-    });
-    let wow = () => {
-      console.log(this.state);
-    };
-    wow.bind(this);
-    setTimeout(() => wow(), 1000);
-    // this.chartReference.update();
-  };
   componentWillMount() {
-    if (window.Chart) {
-      parseOptions(Chart, chartOptions());
-    }
+   
   }
   render() {
     return (
