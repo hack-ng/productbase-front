@@ -16,18 +16,15 @@ import {
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  Media,
   Modal,
   Pagination,
   PaginationItem,
   PaginationLink,
-  Progress,
   Table,
   Container,
   Row,
   Button,
   CardBody,
-  UncontrolledTooltip
 } from "reactstrap";
 // core components
 import Select from "react-select";
@@ -41,7 +38,7 @@ const categories = [
 
 class CreateEntry extends React.Component {
   state = {
-    defaultModal: true
+    defaultModal: false
   };
   toggleModal = state => {
     this.setState({
@@ -518,7 +515,7 @@ class CreateEntry extends React.Component {
                 <CardHeader className="bg-white border-0">
                   <Row className="align-items-center">
                     <Col xs="8">
-                      <h3 className="mb-0">Entries</h3>
+                      <h3 className="mb-0">Products</h3>
                     </Col>
                     <Col className="text-right" xs="4">
                       <Button
