@@ -46,6 +46,7 @@ class Entries extends React.Component {
                 <Table
                   className="align-items-center table-flush"
                   responsive
+                  hover
                 >
                   <thead className="thead-light">
                     <tr>
