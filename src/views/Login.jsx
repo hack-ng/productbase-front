@@ -16,7 +16,9 @@ import {
   Col
 } from "reactstrap";
 
-import { Link } from "react-router-dom";
+import Loader from "../components/Loader"
+
+import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { loginUser } from "../store/actions/auth";
@@ -37,14 +39,17 @@ class Login extends React.Component {
 
     await this.props.loginUser({ ...this.state });
 
-    if (this.props.token) {
-      this.props.history.push("/admin/index");
-    }
+    
   };
 
   render() {
+    if (this.props.token) {
+      return <Redirect to="/admin/index" />
+    }
+    
     return (
       <>
+     
         <Col lg="5" md="7">
           <Card className="bg-secondary shadow border-0">
             {/* <CardHeader className="bg-transparent pb-5">

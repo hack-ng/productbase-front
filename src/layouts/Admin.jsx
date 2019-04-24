@@ -17,9 +17,9 @@ import { connect } from "react-redux";
 
 class Admin extends React.Component {
   componentDidUpdate(e) {
-    document.documentElement.scrollTop = 0;
-    document.scrollingElement.scrollTop = 0;
-    this.refs.mainContent.scrollTop = 0;
+    // document.documentElement.scrollTop = 0;
+    // document.scrollingElement.scrollTop = 0;
+    // this.refs.mainContent.scrollTop = 0;
   }
   getRoutes = routes => {
     return routes.map((prop, key) => {

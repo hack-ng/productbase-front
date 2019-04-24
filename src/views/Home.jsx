@@ -237,7 +237,7 @@ class Home extends React.Component {
                   value={this.state.query}
                 />
                 <InputGroupAddon addonType="prepend">
-                  <Button color="success" onClick={e => {e.preventDefault(); this.onSubmit()}}>
+                  <Button color="success" style={{zIndex: 0}} onClick={e => {e.preventDefault(); this.onSubmit()}}>
                     <i className="fas fa-search" />
                   </Button>
                 </InputGroupAddon>
