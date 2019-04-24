@@ -10,6 +10,8 @@ import {
   FETCH_USER_PENDING,
   FETCH_USER_REJECTED,
   FETCH_USER_FULFILLED,
+  /////////////////////
+  LOGOUT_USER,
 } from "../actions/constants";
 
 const initialState = {
@@ -85,6 +87,15 @@ const authReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         user: action.payload
+      };
+
+    // LOG USER OUT
+    case LOGOUT_USER:
+      return {
+        ...state,
+        loading: false,
+        user: null,
+        token: null
       };
 
     default:

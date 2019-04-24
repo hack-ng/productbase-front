@@ -10,6 +10,8 @@ import {
   FETCH_USER_PENDING,
   FETCH_USER_REJECTED,
   FETCH_USER_FULFILLED,
+  /////////////////////
+  LOGOUT_USER,
 } from "./constants";
 
 import axios from "axios";
@@ -116,5 +118,12 @@ const fetchUserFulfilled = user => {
 };
 
 
+/////////////////////////////////////
+/////// LOGOUT USER
 
-export { createUser, loginUser, fetchUser };
+const logoutUser = () => {
+  return { type: LOGOUT_USER }
+}
+
+
+export { createUser, loginUser, fetchUser, logoutUser };
