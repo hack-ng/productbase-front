@@ -16,6 +16,12 @@ import {
   Col
 } from "reactstrap";
 
+import { connect } from 'react-redux'
+
+import { createUser } from "../store/actions/auth"
+
+
+
 class Register extends React.Component {
   state = {
     first_name: '',
@@ -32,12 +38,19 @@ class Register extends React.Component {
     this.setState({ [name]: value })
   }
 
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
     e.preventDefault()
-    console.log(this.state)
+    await this.props.createUser({...this.state})
+    if (this.props.token){
+      this.props.history.push("/admin/index");
+    }
+    
   }
 
   render() {
+    // if (this.props.token){
+    //   return <Redirect />
+    // }
     return (
       <>
         <Col lg="6" md="8">
@@ -238,4 +251,19 @@ class Register extends React.Component {
   }
 }
 
-export default Register;
+const mapStateToProps = state => {
+  return {
+    loading: state.auth.loading,
+    error: state.auth.error,
+    user: state.auth.user,
+    token: state.auth.token
+  }
+}
+
+const mapDispatchToProps = {
+  createUser
+}
+
+const RegPageWithRedux = connect(mapStateToProps, mapDispatchToProps)(Register)
+
+export default RegPageWithRedux;
