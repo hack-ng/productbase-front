@@ -2,8 +2,8 @@ import Home from "views/Home.jsx";
 import Index from "views/Index.jsx";
 import Profile from "views/examples/Profile.jsx";
 import Maps from "views/examples/Maps.jsx";
-import Register from "views/examples/Register.jsx";
-import Login from "views/examples/Login.jsx";
+import Register from "views/Register.jsx";
+import Login from "views/Login.jsx";
 import Entries from "views/Entries.jsx";
 import CreateEntry from  "views/CreateEntry.jsx"
 import ManageKeys from "views/ManageKeys.jsx";
