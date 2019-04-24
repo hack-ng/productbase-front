@@ -11,6 +11,10 @@ import Index from "views/Index.jsx";
 
 import routes from "routes.js";
 
+import { Redirect } from 'react-router-dom'
+
+import { connect } from "react-redux";
+
 class Admin extends React.Component {
   componentDidUpdate(e) {
     document.documentElement.scrollTop = 0;
@@ -45,6 +49,10 @@ class Admin extends React.Component {
     return "Brand";
   };
   render() {
+    if (!this.props.token){
+      return <Redirect to='/auth/login' />
+    }
+
     return (
       <>
         <Sidebar
@@ -63,10 +71,7 @@ class Admin extends React.Component {
           />
           <Switch>
             {this.getRoutes(routes)}
-            <Route
-              path='/admin'
-              component={Index}
-            />
+            <Route path="/admin" component={Index} />
           </Switch>
           <Container fluid>
             <AdminFooter />
@@ -77,4 +82,10 @@ class Admin extends React.Component {
   }
 }
 
-export default Admin;
+const mapStateToProps = state => {
+  return { token: state.auth.token };
+};
+
+const AdminWithRedux = connect(mapStateToProps, null)(Admin);
+
+export default AdminWithRedux;
