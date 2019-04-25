@@ -15,7 +15,7 @@ import {
 // core components
 import Header from "components/Headers/Header.jsx";
 
-import { fetchAPIKeys, generateAPIKeys } from '../store/actions/apikeys'
+import { fetchAPIKeys, generateAPIKeys, deleteAPIKey } from '../store/actions/apikeys'
 
 import { connect } from 'react-redux'
 
@@ -37,7 +37,7 @@ class ManageKeys extends React.Component {
           />
           <Button
             color="danger"
-            onClick={e => e.preventDefault()}
+            onClick={e => {e.preventDefault(); this.props.deleteAPIKey(apikey.id)}}
             size="sm"
           >
             Delete
@@ -65,7 +65,7 @@ class ManageKeys extends React.Component {
                     <Col className="text-right" xs="4">
                       <Button
                         color="primary"
-                        onClick={e => e.preventDefault()}
+                        onClick={e => {e.preventDefault(); this.props.generateAPIKeys()}}
                         size="sm"
                       >
                         Generate
@@ -74,7 +74,7 @@ class ManageKeys extends React.Component {
                   </Row>
                 </CardHeader>
                 <CardBody>
-                  <Col className="mx-auto" md={8}>
+                  <Col className="mx-auto"  md={8}>
                     {this.renderKeys()}
                   </Col>
                 </CardBody>
@@ -99,7 +99,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   fetchAPIKeys,
-  generateAPIKeys
+  generateAPIKeys,
+  deleteAPIKey
 }
 
 const WithRedux = connect(mapStateToProps, mapDispatchToProps)(ManageKeys);
