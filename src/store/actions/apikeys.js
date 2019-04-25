@@ -5,13 +5,19 @@ import {
   /////////////////////////
   GENERATE_APIKEYS_PENDING,
   GENERATE_APIKEYS_REJECTED,
-  GENERATE_APIKEYS_FULFILLED
+  GENERATE_APIKEYS_FULFILLED,
+  /////////////////////////
+  DELETE_APIKEYS_PENDING,
+  DELETE_APIKEYS_REJECTED,
+  DELETE_APIKEYS_FULFILLED,
+
 } from "./constants";
 
 import axios from "axios";
 
 const fetchAPIKeysApi = "http://localhost:8000/api/apikeys";
 const generateAPIKeysApi = "http://localhost:8000/api/apikeys";
+const deleteAPIKeyApi = "http://localhost:8000/api/apikeys";
 
 const fetchAPIKeys = (token = null) => {
   return async (dispatch, getState) => {
@@ -78,6 +84,41 @@ const generateAPIKeysFulfilled = apikey => {
   return { type: GENERATE_APIKEYS_FULFILLED, payload: apikey };
 };
 
+////////////////////////////////////////////////
+//////// DELETE API KEY
+
+const deleteAPIKey = (id, token = null) => {
+  return async (dispatch, getState) => {
+    dispatch(deleteAPIKeyPending());
+    try {
+      const authToken = token || getState().auth.token;
+      let response = await axios.delete(`${deleteAPIKeyApi}/${id}`, {
+        headers: { Authorization: `Token ${authToken}` }
+      });
+
+    //   once api key is deleted, fetch all api keys
+      await dispatch(fetchAPIKeys(authToken))
+      
+      return dispatch(deleteAPIKeyFulfilled(response.data));
+    } catch (e) {
+      console.log(e.response.data);
+      return dispatch(deleteAPIKeyRejected());
+    }
+  };
+};
+
+const deleteAPIKeyPending = () => {
+  return { type: DELETE_APIKEYS_PENDING };
+};
+
+const deleteAPIKeyRejected = () => {
+  return { type: DELETE_APIKEYS_REJECTED };
+};
+
+const deleteAPIKeyFulfilled = () => {
+  return { type: DELETE_APIKEYS_FULFILLED  };
+};
 
 
-export { fetchAPIKeys, generateAPIKeys };
+
+export { fetchAPIKeys, generateAPIKeys, deleteAPIKey };
