@@ -11,12 +11,42 @@ import {
   Col,
   Button,
   Input,
-  InputGroup
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.jsx";
 
+import { fetchAPIKeys, generateAPIKeys } from '../store/actions/apikeys'
+
+import { connect } from 'react-redux'
+
 class ManageKeys extends React.Component {
+  
+  async componentDidMount(){
+    await this.props.fetchAPIKeys()
+  }
+
+  renderKeys = () => {
+    if (this.props.apikeys){
+      return this.props.apikeys.map(apikey => (
+        <div key={apikey.id} className="d-flex mb-2">
+          <Input
+            value={apikey.code}
+            type="text"
+            disabled
+            className="mr-2"
+          />
+          <Button
+            color="danger"
+            onClick={e => e.preventDefault()}
+            size="sm"
+          >
+            Delete
+          </Button>
+        </div>
+      ));
+    }
+  }
+
   render() {
     return (
       <>
@@ -45,36 +75,7 @@ class ManageKeys extends React.Component {
                 </CardHeader>
                 <CardBody>
                   <Col className="mx-auto" md={8}>
-                    <div className="d-flex mb-2">
-                      <Input
-                        value={"122334adsad"}
-                        type="text"
-                        disabled
-                        className="mr-2"
-                      />
-                      <Button
-                        color="danger"
-                        onClick={e => e.preventDefault()}
-                        size="sm"
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                    <div className="d-flex mb-2">
-                      <Input
-                        value={"122334adsad"}
-                        type="text"
-                        disabled
-                        className="mr-2"
-                      />
-                      <Button
-                        color="danger"
-                        onClick={e => e.preventDefault()}
-                        size="sm"
-                      >
-                        Delete
-                      </Button>
-                    </div>
+                    {this.renderKeys()}
                   </Col>
                 </CardBody>
                 <CardFooter className="py-4" />
@@ -90,4 +91,17 @@ class ManageKeys extends React.Component {
   }
 }
 
-export default ManageKeys;
+const mapStateToProps = state => {
+  return {
+    apikeys: state.apikeys.apikeys
+  }
+}
+
+const mapDispatchToProps = {
+  fetchAPIKeys,
+  generateAPIKeys
+}
+
+const WithRedux = connect(mapStateToProps, mapDispatchToProps)(ManageKeys);
+
+export default WithRedux;
