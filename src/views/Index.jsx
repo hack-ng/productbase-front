@@ -19,6 +19,8 @@ import {
 
 import { Link } from "react-router-dom";
 
+import { connect } from 'react-redux'
+
 import Header from "components/Headers/Header.jsx";
 
 class Index extends React.Component {
@@ -28,9 +30,10 @@ class Index extends React.Component {
   };
   componentWillMount() {}
   render() {
+    
     return (
       <>
-        <Header />
+        <Header  />
         <Container className="mt--7" fluid>
           <Row className="mb-5 pt-4">
             <div className="col">
@@ -88,4 +91,16 @@ class Index extends React.Component {
   }
 }
 
-export default Index;
+const mapStateToProps = state => {
+  return {
+    user: state.auth.user
+  }
+}
+
+const mapDispatchToProps = {
+
+}
+
+const IndexWithRedux = connect(mapStateToProps, mapDispatchToProps)(Index)
+
+export default IndexWithRedux;
