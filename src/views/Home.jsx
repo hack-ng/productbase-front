@@ -27,41 +27,6 @@ import { connect } from "react-redux";
 
 import { fetchProducts } from "../store/actions/products";
 
-const products = [
-  {
-    id: 2,
-    categories: [
-      {
-        id: 12,
-        name: "Food & Berverages"
-      }
-    ],
-    manufacturer: {
-      name: "Teenoh inc",
-      code: "3BTBQ2IYT0",
-      address: "",
-      country: "Nigeria",
-      email: null,
-      phone_number: null,
-      website: null,
-      reg_code: null,
-      reg_year: null
-    },
-    image:
-      "http://res.cloudinary.com/productsng/image/upload/v1556044943/bcauap1uvympdxwtxcjr.png",
-    created: "2019-04-23T18:41:28.726412Z",
-    modified: "2019-04-23T18:42:20.128476Z",
-    is_approved: false,
-    name: "Yoruba Pepper",
-    code: "NS1232",
-    description: "Yoruba Pepper known for its hotness",
-    size: "S",
-    weight: 4.0,
-    shape: "round",
-    color: "blue",
-    entry: 2
-  }
-];
 
 class Home extends React.Component {
   state = {
