@@ -16,10 +16,40 @@ import {
   Col
 } from "reactstrap";
 
+import Loader from "../components/Loader"
+
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+
+import { loginUser } from "../store/actions/auth";
+
 class Login extends React.Component {
+  state = {
+    username: "",
+    password: ""
+  };
+
+  onChange = e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+
+  onSubmit = async e => {
+    e.preventDefault();
+
+    await this.props.loginUser({ ...this.state });
+
+    
+  };
+
   render() {
+    if (this.props.token) {
+      return <Redirect to="/admin/index" />
+    }
+    
     return (
       <>
+     
         <Col lg="5" md="7">
           <Card className="bg-secondary shadow border-0">
             {/* <CardHeader className="bg-transparent pb-5">
@@ -61,7 +91,7 @@ class Login extends React.Component {
               <div className="text-center text-muted mb-4">
                 <small>Sign in with credentials</small>
               </div>
-              <Form role="form">
+              <Form onSubmit={this.onSubmit} role="form">
                 <FormGroup className="mb-3">
                   <InputGroup className="input-group-alternative">
                     <InputGroupAddon addonType="prepend">
@@ -69,7 +99,14 @@ class Login extends React.Component {
                         <i className="ni ni-email-83" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email" type="email" />
+                    <Input
+                      placeholder="Username"
+                      name="username"
+                      type="text"
+                      onChange={this.onChange}
+                      value={this.state.email}
+                      required
+                    />
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
@@ -79,7 +116,14 @@ class Login extends React.Component {
                         <i className="ni ni-lock-circle-open" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Password" type="password" />
+                    <Input
+                      name="password"
+                      placeholder="Password"
+                      type="password"
+                      onChange={this.onChange}
+                      value={this.state.password}
+                      required
+                    />
                   </InputGroup>
                 </FormGroup>
                 {/* <div className="custom-control custom-control-alternative custom-checkbox">
@@ -96,31 +140,31 @@ class Login extends React.Component {
                   </label>
                 </div> */}
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="button">
-                    Sign in
-                  </Button>
+                  <Input
+                    type="submit"
+                    value="Sign In"
+                    className="mt-4 btn btn-primary"
+                  />
                 </div>
               </Form>
             </CardBody>
           </Card>
           <Row className="mt-3">
             <Col xs="6">
-              <a
+              {/* <a
                 className="text-light"
                 href="#pablo"
                 onClick={e => e.preventDefault()}
               >
                 <small>Forgot password?</small>
-              </a>
+              </a> */}
             </Col>
             <Col className="text-right" xs="6">
-              <a
-                className="text-light"
-                href="#pablo"
-                onClick={e => e.preventDefault()}
-              >
-                <small>Create new account</small>
-              </a>
+              <Link to="/auth/register">
+                <span className="text-light">
+                  <small>Create new account</small>
+                </span>
+              </Link>
             </Col>
           </Row>
         </Col>
@@ -129,4 +173,19 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapStateToProps = state => {
+  return {
+    token: state.auth.token
+  };
+};
+
+const mapDispatchToProps = {
+  loginUser
+};
+
+const LoginWithRedux = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);
+
+export default LoginWithRedux;

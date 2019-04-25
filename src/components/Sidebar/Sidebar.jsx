@@ -19,7 +19,8 @@ import {
   Col
 } from "reactstrap";
 
-var ps;
+import { connect } from 'react-redux'
+import { logoutUser } from "../../store/actions/auth"
 
 class Sidebar extends React.Component {
   state = {
@@ -45,6 +46,11 @@ class Sidebar extends React.Component {
       collapseOpen: false
     });
   };
+  handleLogout = async () => {
+    console.log("got here to logout")
+    await this.props.logoutUser();
+    this.props.history.push('/')
+  }
   // creates the links that appear in the left menu / Sidebar
   createLinks = routes => {
     return routes.map((prop, key) => {
@@ -102,7 +108,7 @@ class Sidebar extends React.Component {
           {/* Brand */}
           {logo ? (
             <NavbarBrand className="pt-0" {...navbarBrandProps}>
-              <h1 class="text-dark mb-0">ProductBase</h1>
+              <h1 className="text-dark mb-0">ProductBase</h1>
             </NavbarBrand>
           ) : null}
           {/* Collapse */}
@@ -111,7 +117,7 @@ class Sidebar extends React.Component {
             <div className="navbar-collapse-header d-md-none">
               <Row>
                 <Col className="collapse-brand" xs="6">
-                  <h1 class="text-dark mb-0">ProductBase</h1>
+                  <h1 className="text-dark mb-0">ProductBase</h1>
                 </Col>
                 <Col className="collapse-close" xs="6">
                   <button
@@ -128,16 +134,18 @@ class Sidebar extends React.Component {
             <Nav navbar>
               {this.createLinks(routes)}
               <NavItem>
-                <NavLink
-                  to="/"
-                  tag={NavLinkRRD}
-                  style={{cursor: "pointer"}}
-                  onClick={this.closeCollapse}
-                  activeClassName="stuff"
+                <a
+                  className="nav-link"
+                  // to="/"
+                  // tag={NavLinkRRD}
+                  href="javascript:void(0)"
+                  style={{ cursor: "pointer" }}
+                  onClick={this.handleLogout}
+                  // activeClassName="stuff"
                 >
                   <i className=" ni ni-button-power text-primary" />
                   Logout
-                </NavLink>
+                </a>
               </NavItem>
             </Nav>
           </Collapse>
@@ -168,4 +176,16 @@ Sidebar.propTypes = {
   })
 };
 
-export default Sidebar;
+const mapStateToProps = (state) => {
+  return {
+
+  }
+}
+
+const mapDispatchToProps = {
+  logoutUser
+}
+
+const SidebarWithRedux = connect(mapStateToProps, mapDispatchToProps)(Sidebar)
+
+export default SidebarWithRedux;

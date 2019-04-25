@@ -7,13 +7,19 @@ import AdminNavbar from "components/Navbars/AdminNavbar.jsx";
 import AdminFooter from "components/Footers/AdminFooter.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 
+import Index from "views/Index.jsx";
+
 import routes from "routes.js";
+
+import { Redirect } from 'react-router-dom'
+
+import { connect } from "react-redux";
 
 class Admin extends React.Component {
   componentDidUpdate(e) {
-    document.documentElement.scrollTop = 0;
-    document.scrollingElement.scrollTop = 0;
-    this.refs.mainContent.scrollTop = 0;
+    // document.documentElement.scrollTop = 0;
+    // document.scrollingElement.scrollTop = 0;
+    // this.refs.mainContent.scrollTop = 0;
   }
   getRoutes = routes => {
     return routes.map((prop, key) => {
@@ -43,6 +49,10 @@ class Admin extends React.Component {
     return "Brand";
   };
   render() {
+    if (!this.props.token){
+      return <Redirect to='/auth/login' />
+    }
+
     return (
       <>
         <Sidebar
@@ -59,7 +69,10 @@ class Admin extends React.Component {
             {...this.props}
             brandText={this.getBrandText(this.props.location.pathname)}
           />
-          <Switch>{this.getRoutes(routes)}</Switch>
+          <Switch>
+            {this.getRoutes(routes)}
+            <Route path="/admin" component={Index} />
+          </Switch>
           <Container fluid>
             <AdminFooter />
           </Container>
@@ -69,4 +82,10 @@ class Admin extends React.Component {
   }
 }
 
-export default Admin;
+const mapStateToProps = state => {
+  return { token: state.auth.token };
+};
+
+const AdminWithRedux = connect(mapStateToProps, null)(Admin);
+
+export default AdminWithRedux;

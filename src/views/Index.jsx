@@ -17,19 +17,29 @@ import {
   Col
 } from "reactstrap";
 
+
+
 import { Link } from "react-router-dom";
 
+import { connect } from "react-redux";
+import { fetchEntries } from "../store/actions/entries";
+
 import Header from "components/Headers/Header.jsx";
+import EntriesTable from "components/EntriesTable";
 
 class Index extends React.Component {
   state = {
-    activeNav: 1,
-    chartExample1Data: "data1"
+    activeNav: 1
   };
-  componentWillMount() {}
+  async componentDidMount() {
+    
+      await this.props.fetchEntries();
+    
+  }
+
   render() {
     return (
-      <>
+      <React.Fragment>
         <Header />
         <Container className="mt--7" fluid>
           <Row className="mb-5 pt-4">
@@ -49,43 +59,30 @@ class Index extends React.Component {
                     </Col>
                   </Row>
                 </CardHeader>
-                <Table className="align-items-center table-flush" responsive>
-                  <thead className="thead-light">
-                    <tr>
-                      <th scope="col">Author</th>
-                      <th scope="col">Products count</th>
-                      <th scope="col">Status</th>
-                      <th scope="col">Date Created</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Teenoh</td>
-                      <td>33</td>
-                      <td>Approved</td>
-                      <td>22-03-2019</td>
-                    </tr>
-                    <tr>
-                      <td>Teenoh</td>
-                      <td>33</td>
-                      <td>Pending</td>
-                      <td>22-03-2019</td>
-                    </tr>
-                    <tr>
-                      <td>Teenoh</td>
-                      <td>33</td>
-                      <td>Canceled</td>
-                      <td>22-03-2019</td>
-                    </tr>
-                  </tbody>
-                </Table>
+                <EntriesTable entries={this.props.entries.slice(0,5) || []} onClick={() => {}} />
               </Card>
             </div>
           </Row>
         </Container>
-      </>
+      </React.Fragment>
     );
   }
 }
 
-export default Index;
+const mapStateToProps = state => {
+  return {
+    user: state.auth.user,
+    entries: state.entries.entries
+  };
+};
+
+const mapDispatchToProps = {
+  fetchEntries
+};
+
+const IndexWithRedux = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Index);
+
+export default IndexWithRedux;
