@@ -59,7 +59,7 @@ class Index extends React.Component {
                     </Col>
                   </Row>
                 </CardHeader>
-                <EntriesTable entries={this.props.entries.slice(0,5) || []} />
+                <EntriesTable entries={this.props.entries.slice(0,5) || []} onClick={() => {}} />
               </Card>
             </div>
           </Row>
