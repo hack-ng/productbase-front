@@ -108,7 +108,7 @@ class Sidebar extends React.Component {
           {/* Brand */}
           {logo ? (
             <NavbarBrand className="pt-0" {...navbarBrandProps}>
-              <h1 class="text-dark mb-0">ProductBase</h1>
+              <h1 className="text-dark mb-0">ProductBase</h1>
             </NavbarBrand>
           ) : null}
           {/* Collapse */}
@@ -117,7 +117,7 @@ class Sidebar extends React.Component {
             <div className="navbar-collapse-header d-md-none">
               <Row>
                 <Col className="collapse-brand" xs="6">
-                  <h1 class="text-dark mb-0">ProductBase</h1>
+                  <h1 className="text-dark mb-0">ProductBase</h1>
                 </Col>
                 <Col className="collapse-close" xs="6">
                   <button
