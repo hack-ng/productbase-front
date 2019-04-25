@@ -1,11 +1,9 @@
 import {
-  FETCH_PRODUCTS_PENDING,
-  FETCH_PRODUCTS_REJECTED,
-  FETCH_PRODUCTS_FULFILLED,
-  /////////////////////////
   FETCH_ENTRIES_PENDING,
   FETCH_ENTRIES_REJECTED,
-  FETCH_ENTRIES_FULFILLED,
+  FETCH_ENTRIES_FULFILLED
+  /////////////////////////
+  
 } from "./constants";
 
 import axios from "axios";
