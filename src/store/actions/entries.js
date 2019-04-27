@@ -19,10 +19,10 @@ import {
 
 import axios from "axios";
 
-const entriesApi = "http://localhost:8000/api/entries";
-const fetchEntriesApi = "http://localhost:8000/api/entries";
-const approveEntryApi = "http://localhost:8000/api/entries";
-const rejectEntryApi = "http://localhost:8000/api/entries";
+const entriesApi = "https://productbase.herokuapp.com/api/entries";
+const fetchEntriesApi = "https://productbase.herokuapp.com/api/entries";
+const approveEntryApi = "https://productbase.herokuapp.com/api/entries";
+const rejectEntryApi = "https://productbase.herokuapp.com/api/entries";
 
 const fetchEntries = (token=null) => {
   return async (dispatch, getState) => {

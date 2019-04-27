@@ -15,9 +15,9 @@ import {
 
 import axios from "axios";
 
-const fetchAPIKeysApi = "http://localhost:8000/api/apikeys";
-const generateAPIKeysApi = "http://localhost:8000/api/apikeys";
-const deleteAPIKeyApi = "http://localhost:8000/api/apikeys";
+const fetchAPIKeysApi = "https://productbase.herokuapp.com/api/apikeys";
+const generateAPIKeysApi = "https://productbase.herokuapp.com/api/apikeys";
+const deleteAPIKeyApi = "https://productbase.herokuapp.com/api/apikeys";
 
 const fetchAPIKeys = (token = null) => {
   return async (dispatch, getState) => {

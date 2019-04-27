@@ -16,9 +16,9 @@ import {
 
 import axios from "axios";
 
-const createUserApi = "http://localhost:8000/api/auth/users";
-const loginUserApi = "http://localhost:8000/api/auth/token/login";
-const fetchUserApi = "http://localhost:8000/api/auth/users/me";
+const createUserApi = "https://productbase.herokuapp.com/api/auth/users";
+const loginUserApi = "https://productbase.herokuapp.com/api/auth/token/login";
+const fetchUserApi = "https://productbase.herokuapp.com/api/auth/users/me";
 
 const createUser = (data) => {
   return async dispatch => {

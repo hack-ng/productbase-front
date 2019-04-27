@@ -6,7 +6,7 @@ import {
 
 import axios from "axios";
 
-const fetchProductsApi = "http://localhost:8000/api/products";
+const fetchProductsApi = "https://productbase.herokuapp.com/api/products";
 
 const fetchProducts = (query="") => {
   return async dispatch => {
