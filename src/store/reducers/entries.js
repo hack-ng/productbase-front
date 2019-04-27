@@ -9,7 +9,11 @@ import {
   /////////////////////////
   REJECT_ENTRY_PENDING,
   REJECT_ENTRY_REJECTED,
-  REJECT_ENTRY_FULFILLED
+  REJECT_ENTRY_FULFILLED,
+  /////////////////////////
+  CREATE_ENTRY_PENDING,
+  CREATE_ENTRY_REJECTED,
+  CREATE_ENTRY_FULFILLED
 } from "../actions/constants";
 
 const initialState = {
@@ -40,6 +44,26 @@ const entriesReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         entries: action.payload
+      };
+
+    case CREATE_ENTRY_PENDING:
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+
+    case CREATE_ENTRY_REJECTED:
+      return {
+        ...state,
+        loading: false,
+        error: true
+      };
+
+    case CREATE_ENTRY_FULFILLED:
+      return {
+        ...state,
+        loading: false,
       };
 
     case APPROVE_ENTRY_PENDING:

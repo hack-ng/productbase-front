@@ -9,13 +9,17 @@ import {
   /////////////////////////
   REJECT_ENTRY_PENDING,
   REJECT_ENTRY_REJECTED,
-  REJECT_ENTRY_FULFILLED
+  REJECT_ENTRY_FULFILLED,
   /////////////////////////
-  
+  CREATE_ENTRY_PENDING,
+  CREATE_ENTRY_REJECTED,
+  CREATE_ENTRY_FULFILLED,
+
 } from "./constants";
 
 import axios from "axios";
 
+const entriesApi = "http://localhost:8000/api/entries";
 const fetchEntriesApi = "http://localhost:8000/api/entries";
 const approveEntryApi = "http://localhost:8000/api/entries";
 const rejectEntryApi = "http://localhost:8000/api/entries";
@@ -51,8 +55,50 @@ const fetchEntriesFulfilled = entries => {
 };
 
 
+
 ///////////////////////////////////////////////////////
-///////// APPROVE ENTRY PENDING
+///////// CREATE ENTRY 
+
+const createEntry = (data, token = null) => {
+  return async (dispatch, getState) => {
+    dispatch(createEntryPending());
+    try {
+          const authToken = token || getState().auth.token;
+          let response = await axios.post(`${entriesApi}/`, data, {
+            headers: {
+              Authorization: `Token ${authToken}`,
+              "Content-Type": "multipart/form-data"
+            }
+          });
+
+          console.log(response);
+
+          // update entries
+          await dispatch(fetchEntries());
+
+          return dispatch(createEntryFulfilled(response.data));
+        } catch (e) {
+      console.log(e.response.data);
+      return dispatch(createEntryRejected());
+    }
+  };
+};
+
+const createEntryPending = () => {
+  return { type: CREATE_ENTRY_PENDING };
+};
+
+const createEntryRejected = () => {
+  return { type: CREATE_ENTRY_REJECTED };
+};
+
+const createEntryFulfilled = entry => {
+  return { type: CREATE_ENTRY_FULFILLED, payload: entry };
+};
+
+
+///////////////////////////////////////////////////////
+///////// APPROVE ENTRY 
 
 const approveEntry = (id, token = null) => {
   return async (dispatch, getState) => {
@@ -92,7 +138,7 @@ const approveEntryFulfilled = entry => {
 
 
 ///////////////////////////////////////////////////////
-///////// REJECT ENTRY PENDING
+///////// REJECT ENTRY 
 
 const rejectEntry = (id, token = null) => {
   return async (dispatch, getState) => {
@@ -134,4 +180,4 @@ const rejectEntryFulfilled = entry => {
 
 
 
-export { fetchEntries, approveEntry, rejectEntry };
+export { fetchEntries, createEntry, approveEntry, rejectEntry };

@@ -31,7 +31,8 @@ import {
 import Select from "react-select";
 import Header from "components/Headers/Header.jsx";
 
-import ProductsTable from "../components/ProductsTable";
+import { connect } from 'react-redux'
+import { createEntry } from "../store/actions/entries"
 
 const categories = [
   { value: "chocolate", label: "App and Games" },
@@ -140,7 +141,7 @@ class CreateEntry extends React.Component {
     this.setState({ products, newProduct: emptyProduct });
   };
 
-  handleSubmitEntry = () => {
+  handleSubmitEntry = async () => {
     const products = this.state.products
     let formData = new FormData()
     for (let index in products){
@@ -150,7 +151,7 @@ class CreateEntry extends React.Component {
       formData.append(`product_${index}_image`, product.image)
     }
 
-    console.log(formData)
+    await this.props.createEntry(formData)
   }
 
   renderModal = () => {
@@ -883,4 +884,16 @@ class CreateEntry extends React.Component {
   }
 }
 
-export default CreateEntry;
+const mapStateToProps = state => {
+  return {
+
+  }
+}
+
+const mapDispatchToProps = {
+  createEntry
+}
+
+const CreateEntrywithRedux = connect(mapStateToProps, mapDispatchToProps)(CreateEntry)
+
+export default CreateEntrywithRedux;
