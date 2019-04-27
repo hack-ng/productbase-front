@@ -30,12 +30,24 @@ import ProductsTable from "components/ProductsTable";
 
 import { connect } from "react-redux";
 
+import {
+  fetchEntries,
+  approveEntry,
+  rejectEntry
+} from "../store/actions/entries";
+
 class Entries extends React.Component {
   state = {
     activeEntry: null,
     activeProduct: null,
-    showModal: false,
+    showModal: false
   };
+
+  componentDidMount() {
+    if (!this.props.entries) {
+      this.props.fetchEntries();
+    }
+  }
 
   toggleModal = () => {
     this.setState({
@@ -48,6 +60,14 @@ class Entries extends React.Component {
     this.toggleModal();
   };
 
+  handleEntryAction = async (action, id) => {
+    if (action == "approve"){
+      return await this.props.approveEntry(id)
+    }
+    else if (action == "reject" ){
+      return await this.props.rejectEntry(id)
+    }
+  }
 
   renderModal = () => {
     const product = this.state.activeProduct;
@@ -176,34 +196,61 @@ class Entries extends React.Component {
       );
   };
 
+  isManager = () => {
+    if (
+      this.props.user.groups.indexOf("manager") > -1 ||
+      this.props.user.groups.indexOf("superuser") > -1
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   renderProducts = () => {
     if (this.state.activeEntry) {
       return (
         <Card className="shadow">
           <CardHeader className="bg-white border-0">
             <Row className="align-items-center">
-              <Col xs="8">
+              <Col xs="6">
                 <h3 className="mb-0">Products</h3>
               </Col>
-              <Col className="text-right" xs="4">
-                <Button
-                  color="success"
-                  onClick={e => e.preventDefault()}
-                  size="sm"
-                >
-                  Approve
-                </Button>
-                <Button
-                  color="danger"
-                  onClick={e => e.preventDefault()}
-                  size="sm"
-                >
-                  Reject
-                </Button>
-              </Col>
+              {this.isManager() ? (
+                <Col className="text-right" xs="6">
+                  <Button
+                    color="success"
+                    onClick={e => {
+                      e.preventDefault();
+                      this.handleEntryAction(
+                        "approve",
+                        this.state.activeEntry.id
+                      );
+                    }}
+                    size="sm"
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    color="danger"
+                    onClick={e => {
+                      e.preventDefault();
+                      this.handleEntryAction(
+                        "reject",
+                        this.state.activeEntry.id
+                      );
+                    }}
+                    size="sm"
+                  >
+                    Reject
+                  </Button>
+                </Col>
+              ) : null}
             </Row>
           </CardHeader>
-          <ProductsTable products={this.state.activeEntry.products} onView={this.showProductModal} />
+          <ProductsTable
+            products={this.state.activeEntry.products}
+            onView={this.showProductModal}
+          />
 
           {/* <Table
                   className="align-items-center table-flush"
@@ -475,7 +522,7 @@ class Entries extends React.Component {
           <Row className="mb-5">
             <div className="col">{this.renderProducts()}</div>
           </Row>
-          { this.renderModal() }
+          {this.renderModal()}
         </Container>
       </React.Fragment>
     );
@@ -483,10 +530,17 @@ class Entries extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { entries: state.entries.entries };
+  return {
+    user: state.auth.user,
+    entries: state.entries.entries
+  };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  fetchEntries,
+  approveEntry,
+  rejectEntry
+};
 
 const EntriesWithRedux = connect(
   mapStateToProps,
