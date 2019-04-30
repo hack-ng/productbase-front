@@ -6,7 +6,9 @@ import {
 
 import axios from "axios";
 
-const fetchProductsApi = "https://productbase.herokuapp.com/api/products";
+import { BASE_URL } from "../services/api";
+
+const fetchProductsApi = `${BASE_URL}/api/products`;
 
 const fetchProducts = (query="") => {
   return async dispatch => {

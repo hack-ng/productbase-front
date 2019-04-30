@@ -13,7 +13,7 @@ import {
   Input,
 } from "reactstrap";
 // core components
-import Header from "components/Headers/Header.jsx";
+import Header from "../components/Headers/Header.jsx";
 
 import { fetchAPIKeys, generateAPIKeys, deleteAPIKey } from '../store/actions/apikeys'
 

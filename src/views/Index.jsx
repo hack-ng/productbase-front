@@ -1,17 +1,10 @@
 import React from "react";
 // node.js library that concatenates classes (strings)
-import classnames from "classnames";
 
 import {
   Button,
   Card,
   CardHeader,
-  CardBody,
-  NavItem,
-  NavLink,
-  Nav,
-  Progress,
-  Table,
   Container,
   Row,
   Col
@@ -24,8 +17,8 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { fetchEntries } from "../store/actions/entries";
 
-import Header from "components/Headers/Header.jsx";
-import EntriesTable from "components/EntriesTable";
+import Header from "../components/Headers/Header.jsx";
+import EntriesTable from "../components/EntriesTable";
 
 class Index extends React.Component {
   state = {

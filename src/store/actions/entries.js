@@ -19,10 +19,12 @@ import {
 
 import axios from "axios";
 
-const entriesApi = "https://productbase.herokuapp.com/api/entries";
-const fetchEntriesApi = "https://productbase.herokuapp.com/api/entries";
-const approveEntryApi = "https://productbase.herokuapp.com/api/entries";
-const rejectEntryApi = "https://productbase.herokuapp.com/api/entries";
+import { BASE_URL } from "../services/api";
+
+const entriesApi = `${BASE_URL}/api/entries`;
+const fetchEntriesApi = `${BASE_URL}/api/entries`;
+const approveEntryApi = `${BASE_URL}/api/entries`;
+const rejectEntryApi = `${BASE_URL}/api/entries`;
 
 const fetchEntries = (token=null) => {
   return async (dispatch, getState) => {

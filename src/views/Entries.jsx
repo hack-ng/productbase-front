@@ -2,31 +2,30 @@ import React from "react";
 
 // reactstrap components
 import {
-  Badge,
   Card,
   CardHeader,
   CardFooter,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  Media,
+  // DropdownMenu,
+  // DropdownItem,
+  // UncontrolledDropdown,
+  // DropdownToggle,
+  // Media,
   Pagination,
   PaginationItem,
   PaginationLink,
-  Progress,
-  Table,
+  // Progress,
+  // Table,
   Container,
   Row,
   Col,
   Button,
   Modal,
-  UncontrolledTooltip
+  // UncontrolledTooltip
 } from "reactstrap";
 // core components
-import Header from "components/Headers/Header.jsx";
-import EntriesTable from "components/EntriesTable";
-import ProductsTable from "components/ProductsTable";
+import Header from "../components/Headers/Header.jsx";
+import EntriesTable from "../components/EntriesTable";
+import ProductsTable from "../components/ProductsTable";
 
 import { connect } from "react-redux";
 

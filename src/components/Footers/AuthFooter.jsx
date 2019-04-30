@@ -8,7 +8,7 @@ class Login extends React.Component {
   render() {
     return (
       <>
-        <footer className="py-5">
+        <footer className="py-2" style={{position: "fixed", bottom: 16, left: 16, width: '100%'}}>
           <Container>
             <Row className="align-items-center justify-content-xl-between">
               <Col xl="6">

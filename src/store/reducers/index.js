@@ -15,11 +15,23 @@ const persistConfig = {
   blacklist: ["products", "entries"]
 };
 
+const authPersistConfig = {
+  key: "auth",
+  storage: storage,
+  whitelist: ["user", "token"]
+};
+
+const apikeysPersistConfig = {
+  key: "apikeys",
+  storage: storage,
+  whitelist: ["apikeys"]
+};
+
 const rootReducer = combineReducers({
     products: productsReducer,
-    auth: authReducer,
+    auth: persistReducer(authPersistConfig, authReducer),
     entries: entriesReducer,
-    apikeys: apikeysReducer,
+    apikeys: persistReducer(apikeysPersistConfig, apikeysReducer),
 })
 
 const pReducer = persistReducer(persistConfig, rootReducer);

@@ -2,9 +2,7 @@ import React from "react";
 
 // reactstrap components
 import {
-  Button,
   Card,
-  CardHeader,
   CardBody,
   FormGroup,
   Form,
@@ -20,6 +18,9 @@ import Loader from "../components/Loader"
 
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+
+import { withToastManager } from "react-toast-notifications";
+
 
 import { loginUser } from "../store/actions/auth";
 
@@ -39,17 +40,36 @@ class Login extends React.Component {
 
     await this.props.loginUser({ ...this.state });
 
+    const { toastManager } = this.props;
+
+    if (this.props.error) {
+      for (let x of this.props.error) {
+        toastManager.add(`Something went wrong: "${x}"`, {
+          appearance: "error",
+          autoDismiss: true
+        });
+      }
+      return;
+    }
+
+    await toastManager.add(
+      `Logged In successfully"`,
+      {
+        appearance: "success",
+        autoDismiss: true
+      }
+    );
+
+    return setTimeout(() => this.props.history.push("/admin/index"), 4000);
+
     
   };
 
   render() {
-    if (this.props.token) {
-      return <Redirect to="/admin/index" />
-    }
     
     return (
       <>
-     
+      {this.props.loading ? <Loader/>: null}
         <Col lg="5" md="7">
           <Card className="bg-secondary shadow border-0">
             {/* <CardHeader className="bg-transparent pb-5">
@@ -175,7 +195,9 @@ class Login extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    token: state.auth.token
+    token: state.auth.token,
+    loading: state.auth.loading,
+    error: state.auth.error,
   };
 };
 
@@ -188,4 +210,6 @@ const LoginWithRedux = connect(
   mapDispatchToProps
 )(Login);
 
-export default LoginWithRedux;
+const LoginWithReduxNToast = withToastManager(LoginWithRedux)
+
+export default LoginWithReduxNToast;

@@ -5,19 +5,17 @@ import {
   Button,
   Card,
   CardHeader,
-  CardBody,
   FormGroup,
   Form,
   Input,
   InputGroupAddon,
   InputGroup,
   Row,
-  PaginationItem,
+  // PaginationItem,
   Modal,
-  PaginationLink,
-  Table,
+  // PaginationLink,
   CardFooter,
-  Pagination,
+  // Pagination,
   Col
 } from "reactstrap";
 
@@ -55,6 +53,12 @@ class Home extends React.Component {
     await this.props.fetchProducts(query)
     console.log("after la action call")
 
+  }
+
+  submitOnEnter = (e) => {
+    if (e.keyCode == 13 && e.shiftKey == false){
+      this.onSubmit()
+    }
   }
 
   renderModal = () => {
@@ -187,6 +191,8 @@ class Home extends React.Component {
       );
   };
 
+
+
   render() {
     console.log(this.props)
     return (
@@ -200,6 +206,7 @@ class Home extends React.Component {
                   type="text"
                   onChange={e => this.setState({query: e.target.value})}
                   value={this.state.query}
+                  onKeyDown={this.submitOnEnter}
                 />
                 <InputGroupAddon addonType="prepend">
                   <Button color="success" style={{zIndex: 0}} onClick={e => {e.preventDefault(); this.onSubmit()}}>
@@ -213,7 +220,7 @@ class Home extends React.Component {
 
         <Col lg="10">
           <div className="col">
-            <Card className="shadow">
+            {this.props.products ? <Card className="shadow">
               <CardHeader className="border-0">
                 <h3 className="mb-0">Products</h3>
               </CardHeader>
@@ -273,7 +280,7 @@ class Home extends React.Component {
                   </Pagination>
                 </nav> */}
               </CardFooter>
-            </Card>
+            </Card>: null}
           </div>
         </Col>
         {this.renderModal()}

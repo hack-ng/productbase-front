@@ -29,7 +29,7 @@ import {
 } from "reactstrap";
 // core components
 import Select from "react-select";
-import Header from "components/Headers/Header.jsx";
+import Header from "../components/Headers/Header.jsx";
 
 import { connect } from 'react-redux'
 import { createEntry } from "../store/actions/entries"

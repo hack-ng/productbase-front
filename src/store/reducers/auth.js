@@ -18,7 +18,14 @@ const initialState = {
   token: null,
   user: null,
   loading: false,
-  error: null
+  error: null,
+  success: null,
+  regLoading: false,
+  regError: null,
+  regSuccess: null,
+  fetchLoading: false,
+  fetchError: null,
+  fetchSuccess: null
 };
 
 const authReducer = (state = initialState, action) => {
@@ -27,22 +34,24 @@ const authReducer = (state = initialState, action) => {
     case CREATE_USER_PENDING:
       return {
         ...state,
-        loading: true,
-        error: null
+        regLoading: true,
+        error: null,
+        success: null
       };
 
     case CREATE_USER_REJECTED:
       return {
         ...state,
-        loading: false,
-        error: true
+        regLoading: false,
+        error: action.payload
       };
 
     case CREATE_USER_FULFILLED:
       return {
         ...state,
-        loading: false,
-        user: action.payload
+        regLoading: false,
+        // user: action.payload,
+        success: true
       };
 
     //   LOGIN USER
@@ -50,42 +59,44 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-        error: null
+        error: null,
+        success: null
       };
 
     case LOGIN_USER_REJECTED:
       return {
         ...state,
         loading: false,
-        error: true
+        error: action.payload,
       };
 
     case LOGIN_USER_FULFILLED:
       return {
         ...state,
         loading: false,
-        token: action.payload
+        token: action.payload,
+        success: true
       };
 
     //   FETCH USER
     case FETCH_USER_PENDING:
       return {
         ...state,
-        loading: true,
-        error: null
+        fetchLoading: true,
+        fetchError: null
       };
 
     case FETCH_USER_REJECTED:
       return {
         ...state,
-        loading: false,
-        error: true
+        fetchLoading: false,
+        fetchError: action.payload
       };
 
     case FETCH_USER_FULFILLED:
       return {
         ...state,
-        loading: false,
+        fetchLoading: false,
         user: action.payload
       };
 
