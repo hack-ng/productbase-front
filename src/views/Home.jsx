@@ -20,6 +20,7 @@ import {
 } from "reactstrap";
 
 import ProductsTable from "../components/ProductsTable";
+import Loader from "../components/Loader"
 
 import { connect } from "react-redux";
 
@@ -197,6 +198,7 @@ class Home extends React.Component {
     console.log(this.props)
     return (
       <>
+      {this.props.loading ? <Loader/>: null}
         <Col lg="6" md="8" sm="10" className="mb-4 mx-auto">
           <Form onSubmit={e => e.preventDefault()} className="mx-3">
             <FormGroup className="mb-0">
