@@ -2,9 +2,9 @@ import React from "react";
 
 // reactstrap components
 import {
-  Button,
+  // Button,
   Card,
-  CardHeader,
+  // CardHeader,
   CardBody,
   FormGroup,
   Form,
@@ -16,36 +16,54 @@ import {
   Col
 } from "reactstrap";
 
-import { connect } from 'react-redux'
+import Loader from "../components/Loader";
 
-import { createUser } from "../store/actions/auth"
+import { connect } from "react-redux";
 
+import { withToastManager } from "react-toast-notifications";
 
+import { createUser } from "../store/actions/auth";
 
 class Register extends React.Component {
   state = {
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone_number: '',
-    username: '',
-    password: ''
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
+    username: "",
+    password: ""
   };
 
-
   onChange = e => {
-    const { name, value } = e.target
-    this.setState({ [name]: value })
-  }
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
 
-  onSubmit = async (e) => {
-    e.preventDefault()
-    await this.props.createUser({...this.state})
-    if (this.props.token){
-      this.props.history.push("/admin/index");
+  onSubmit = async e => {
+    e.preventDefault();
+    await this.props.createUser({ ...this.state });
+    const { toastManager } = this.props;
+
+    if (this.props.error) {
+      for (let x of this.props.error) {
+        toastManager.add(`Something went wrong: "${x}"`, {
+          appearance: "error",
+          autoDismiss: true
+        });
+      }
+      return;
     }
-    
-  }
+
+    await toastManager.add(
+      `User "${this.props.user.username} created successfully"`,
+      {
+        appearance: "success",
+        autoDismiss: true
+      }
+    );
+
+    return setTimeout(() => this.props.history.push("/admin/index"), 4000);
+  };
 
   render() {
     // if (this.props.token){
@@ -53,6 +71,7 @@ class Register extends React.Component {
     // }
     return (
       <>
+        {this.props.loading ? <Loader /> : null}
         <Col lg="6" md="8">
           <Card className="bg-secondary shadow border-0">
             {/* <CardHeader className="bg-transparent pb-5">
@@ -111,7 +130,6 @@ class Register extends React.Component {
                           required
                           onChange={this.onChange}
                           value={this.state.first_name}
-
                         />
                       </InputGroup>
                     </Col>
@@ -239,7 +257,6 @@ class Register extends React.Component {
                     type="submit"
                     value="Create Account"
                     className="mt-4 btn btn-primary"
-                  
                   />
                 </div>
               </Form>
@@ -253,17 +270,23 @@ class Register extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    loading: state.auth.loading,
+    loading: state.auth.regLoading,
     error: state.auth.error,
+    success: state.auth.success,
     user: state.auth.user,
     token: state.auth.token
-  }
-}
+  };
+};
 
 const mapDispatchToProps = {
   createUser
-}
+};
 
-const RegPageWithRedux = connect(mapStateToProps, mapDispatchToProps)(Register)
+const RegPageWithRedux = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Register);
 
-export default RegPageWithRedux;
+const RegPageWithReduxNToast = withToastManager(RegPageWithRedux);
+
+export default RegPageWithReduxNToast;

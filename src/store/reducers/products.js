@@ -5,7 +5,7 @@ import {
 } from "../actions/constants";
 
 const initialState = {
-  products: [],
+  products: null,
   loading: false,
   error: null
 };

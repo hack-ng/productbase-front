@@ -1,13 +1,11 @@
-import Home from "views/Home.jsx";
-import Index from "views/Index.jsx";
-import Profile from "views/examples/Profile.jsx";
-import Maps from "views/examples/Maps.jsx";
-import Register from "views/Register.jsx";
-import Login from "views/Login.jsx";
-import Entries from "views/Entries.jsx";
-import CreateEntry from  "views/CreateEntry.jsx"
-import ManageKeys from "views/ManageKeys.jsx";
-import Icons from "views/examples/Icons.jsx";
+import Home from "./views/Home.jsx";
+import Index from "./views/Index.jsx";
+// import Profile from "./views/examples/Profile.jsx";
+import Register from "./views/Register.jsx";
+import Login from "./views/Login.jsx";
+import Entries from "./views/Entries.jsx";
+import CreateEntry from  "./views/CreateEntry.jsx"
+import ManageKeys from "./views/ManageKeys.jsx";
 
 var routes = [
   {
@@ -43,13 +41,6 @@ var routes = [
   //   name: "User Profile",
   //   icon: "ni ni-single-02 text-primary",
   //   component: Profile,
-  //   layout: "/admin"
-  // },
-  // {
-  //   path: "/icons",
-  //   name: "Icons",
-  //   icon: "ni ni-planet text-blue",
-  //   component: Icons,
   //   layout: "/admin"
   // },
   {

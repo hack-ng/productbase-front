@@ -25,11 +25,17 @@ import {
   Container,
   Row,
   Button,
-  CardBody,
+  CardBody
 } from "reactstrap";
 // core components
 import Select from "react-select";
-import Header from "components/Headers/Header.jsx";
+import Header from "../components/Headers/Header.jsx";
+import Loader from "../components/Loader"
+
+
+import { connect } from "react-redux";
+import { withToastManager } from "react-toast-notifications";
+import { createEntry } from "../store/actions/entries";
 
 const categories = [
   { value: "chocolate", label: "App and Games" },
@@ -40,8 +46,66 @@ const categories = [
 class CreateEntry extends React.Component {
   state = {
     defaultModal: false,
-    showAddForm: false
+    showAddForm: false,
+    newProduct: {
+      name: "",
+      code: "",
+      size: "",
+      weight: "",
+      shape: "",
+      color: "",
+      description: "",
+      categories: [],
+      image: "",
+      preview: "",
+      manufacturer: {
+        name: "",
+        email: "",
+        country: "",
+        phone_number: "",
+        website: "",
+        reg_code: "",
+        reg_year: "",
+        address: ""
+      }
+    },
+    products: []
   };
+
+  handleImageChange = e => {
+    let { newProduct } = this.state;
+    newProduct.image = e.target.files[0];
+    this.setState({
+      newProduct
+    });
+    const reader = new FileReader();
+    reader.onload = e => {
+      newProduct.preview = e.target.result;
+      this.setState({
+        newProduct
+      });
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+
+  handleProductChange = e => {
+    const { name, value } = e.target;
+    console.log(`got here => ${name}-${value}`);
+    this.setState({ newProduct: { ...this.state.newProduct, [name]: value } });
+  };
+
+  handleManufacturerChange = e => {
+    let { name, value } = e.target;
+    name = name.split("man-")[1];
+    console.log(`got here => ${name}-${value}`);
+    this.setState({
+      newProduct: {
+        ...this.state.newProduct,
+        manufacturer: { ...this.state.newProduct.manufacturer, [name]: value }
+      }
+    });
+  };
+
   toggleModal = state => {
     this.setState({
       [state]: !this.state[state]
@@ -50,8 +114,68 @@ class CreateEntry extends React.Component {
 
   toggleAddForm = () => {
     const oldVal = this.state.showAddForm;
-    this.setState({showAddForm: !oldVal})
-  }
+    this.setState({ showAddForm: !oldVal });
+  };
+
+  addProductToEntry = () => {
+    let products = [...this.state.products, this.state.newProduct];
+    let emptyProduct = {
+      name: "",
+      code: "",
+      size: "",
+      weight: "",
+      shape: "",
+      color: "",
+      description: "",
+      categories: [],
+      image: "",
+      preview: "",
+      manufacturer: {
+        name: "",
+        email: "",
+        country: "",
+        phone_number: "",
+        website: "",
+        reg_code: "",
+        reg_year: "",
+        address: ""
+      }
+    };
+    this.setState({ products, newProduct: emptyProduct });
+  };
+
+  handleSubmitEntry = async () => {
+    const { products } = this.state;
+    let formData = new FormData();
+    for (let index in products) {
+      let product = products[index];
+      delete product.preview;
+    
+
+      formData.append(`product_${index}`, JSON.stringify(product));
+      formData.append(`product_${index}_image`, product.image);
+    }
+    const { toastManager } = this.props;
+
+    await this.props.createEntry(formData);
+
+    if (this.props.error) {
+      for (let x of this.props.error) {
+        toastManager.add(`Something went wrong: "${x}"`, {
+          appearance: "error",
+          autoDismiss: true
+        });
+      }
+      return;
+    }
+
+    if (this.props.success) {
+      await toastManager.add(`Created Entry successfully"`, {
+        appearance: "success",
+        autoDismiss: true
+      });
+    }
+  };
 
   renderModal = () => {
     return (
@@ -160,11 +284,9 @@ class CreateEntry extends React.Component {
               </Row>
 
               <Row className="mb-3">
-                <Col >
+                <Col>
                   <h4>Address</h4>
-                  <p> 
-                   15 Uptown Funk, Lasgidi
-                   </p>
+                  <p>15 Uptown Funk, Lasgidi</p>
                 </Col>
               </Row>
             </Col>
@@ -172,7 +294,7 @@ class CreateEntry extends React.Component {
         </div>
         <div className="modal-footer">
           <Button color="primary" type="button">
-           Edit
+            Edit
           </Button>
           <Button
             className="ml-auto"
@@ -193,6 +315,7 @@ class CreateEntry extends React.Component {
       <React.Fragment>
         <Header hideSummary={true} />
         {/* Page content */}
+        {this.props.loading ? <Loader />: null}
         <Container className="mt--7" fluid>
           <Row className="mb-5">
             <Col xl="10">
@@ -204,19 +327,14 @@ class CreateEntry extends React.Component {
                   <Row className="align-items-center">
                     <Col className="">
                       <h3 className="mb-2">Upload Spreadsheet</h3>
-                      <Input
-                        type="file"
-                        className="mb-4"
-
-                      />
+                      <Input type="file" className="mb-4" />
                       <Button color="primary" size="sm">
                         Upload
                       </Button>
                     </Col>
                   </Row>
                 </CardHeader>
-                
-                </Card>
+              </Card>
             </Col>
           </Row>
           <Row className="mb-5">
@@ -230,7 +348,7 @@ class CreateEntry extends React.Component {
                     <Col xs="8">
                       <h3 className="mb-0">Add Product manually</h3>
                     </Col>
-                    <Col className="text-right" xs="4">
+                    {/* <Col className="text-right" xs="4">
                       <Button
                         color="primary"
                         href="#pablo"
@@ -239,12 +357,22 @@ class CreateEntry extends React.Component {
                       >
                         Add
                       </Button>
-                    </Col>
+                    </Col> */}
                   </Row>
                 </CardHeader>
                 <Collapse isOpen={this.state.showAddForm}>
                   <CardBody>
-                    <Form>
+                    <Form
+                      onSubmit={e => {
+                        e.preventDefault();
+                        this.addProductToEntry();
+                      }}
+                    >
+                      <div className="text-right">
+                        <Button color="primary" size="sm">
+                          Add To Entry
+                        </Button>
+                      </div>
                       <h6 className="heading-small text-muted mb-4">
                         Product Information
                       </h6>
@@ -261,8 +389,12 @@ class CreateEntry extends React.Component {
                               <Input
                                 className="form-control-alternative"
                                 id="name"
+                                name="name"
+                                onChange={this.handleProductChange}
+                                value={this.state.newProduct.name}
                                 placeholder="Product Name"
                                 type="text"
+                                required
                               />
                             </FormGroup>
                           </Col>
@@ -277,8 +409,12 @@ class CreateEntry extends React.Component {
                               <Input
                                 className="form-control-alternative"
                                 id="code"
+                                name="code"
+                                onChange={this.handleProductChange}
+                                value={this.state.newProduct.code}
                                 placeholder="Product Code"
                                 type="text"
+                                required
                               />
                             </FormGroup>
                           </Col>
@@ -296,6 +432,8 @@ class CreateEntry extends React.Component {
                                 type="select"
                                 className="form-control-alternative"
                                 name="size"
+                                onChange={this.handleProductChange}
+                                value={this.state.newProduct.size}
                                 id="sizeSelect"
                               >
                                 <option value="">-----</option>
@@ -303,9 +441,7 @@ class CreateEntry extends React.Component {
                                 <option value="M">Medium</option>
                                 <option value="L">Large</option>
                                 <option value="XL">Extra Large</option>
-                                <option value="XXL">
-                                  Extra Extra Large
-                                </option>
+                                <option value="XXL">Extra Extra Large</option>
                               </Input>
                             </FormGroup>
                           </Col>
@@ -320,7 +456,10 @@ class CreateEntry extends React.Component {
                               <Input
                                 className="form-control-alternative"
                                 id="weight"
+                                name="weight"
                                 placeholder="Weight"
+                                onChange={this.handleProductChange}
+                                value={this.state.newProduct.weight}
                                 type="number"
                               />
                             </FormGroup>
@@ -336,7 +475,10 @@ class CreateEntry extends React.Component {
                               <Input
                                 className="form-control-alternative"
                                 id="shape"
+                                name="shape"
                                 placeholder="Product Shape"
+                                onChange={this.handleProductChange}
+                                value={this.state.newProduct.shape}
                                 type="text"
                               />
                             </FormGroup>
@@ -352,7 +494,10 @@ class CreateEntry extends React.Component {
                               <Input
                                 className="form-control-alternative"
                                 id="color"
+                                name="color"
                                 placeholder="Product Color"
+                                onChange={this.handleProductChange}
+                                value={this.state.newProduct.color}
                                 type="text"
                               />
                             </FormGroup>
@@ -375,6 +520,8 @@ class CreateEntry extends React.Component {
                                 id="product-image"
                                 name="image"
                                 type="file"
+                                onChange={this.handleImageChange}
+                                required
                               />
                             </FormGroup>
                           </Col>
@@ -391,7 +538,11 @@ class CreateEntry extends React.Component {
                                 placeholder="Product Description"
                                 rows="4"
                                 id="product-description"
+                                name="description"
+                                onChange={this.handleProductChange}
+                                value={this.state.newProduct.description}
                                 type="textarea"
+                                required
                               />
                             </FormGroup>
                           </Col>
@@ -408,16 +559,19 @@ class CreateEntry extends React.Component {
                             <FormGroup>
                               <label
                                 className="form-control-label"
-                                htmlFor="input-address"
+                                htmlFor="man-name"
                               >
                                 Name
                               </label>
                               <Input
                                 className="form-control-alternative"
-                                defaultValue="Johnny Ventures"
-                                id="input-address"
-                                placeholder="Home Address"
+                                name="man-name"
+                                id="man-name"
+                                placeholder="Manufacturer Name"
                                 type="text"
+                                onChange={this.handleManufacturerChange}
+                                value={this.state.newProduct.manufacturer.name}
+                                required
                               />
                             </FormGroup>
                           </Col>
@@ -431,10 +585,12 @@ class CreateEntry extends React.Component {
                               </label>
                               <Input
                                 className="form-control-alternative"
-                                defaultValue="Nigeria"
                                 id="man-email"
+                                name="man-email"
                                 placeholder="Email"
                                 type="text"
+                                onChange={this.handleManufacturerChange}
+                                value={this.state.newProduct.manufacturer.email}
                               />
                             </FormGroup>
                           </Col>
@@ -451,7 +607,13 @@ class CreateEntry extends React.Component {
                               <Input
                                 className="form-control-alternative"
                                 id="man-country"
+                                name="man-country"
                                 type="text"
+                                onChange={this.handleManufacturerChange}
+                                required
+                                value={
+                                  this.state.newProduct.manufacturer.country
+                                }
                               />
                             </FormGroup>
                           </Col>
@@ -466,8 +628,14 @@ class CreateEntry extends React.Component {
                               <Input
                                 className="form-control-alternative"
                                 id="man-phone_number"
+                                name="man-phone_number"
                                 placeholder=""
                                 type="text"
+                                onChange={this.handleManufacturerChange}
+                                value={
+                                  this.state.newProduct.manufacturer
+                                    .phone_number
+                                }
                               />
                             </FormGroup>
                           </Col>
@@ -482,8 +650,13 @@ class CreateEntry extends React.Component {
                               <Input
                                 className="form-control-alternative"
                                 id="man-website"
+                                name="man-website"
                                 placeholder="Manufacturer website"
                                 type="text"
+                                onChange={this.handleManufacturerChange}
+                                value={
+                                  this.state.newProduct.manufacturer.website
+                                }
                               />
                             </FormGroup>
                           </Col>
@@ -497,9 +670,14 @@ class CreateEntry extends React.Component {
                               </label>
                               <Input
                                 className="form-control-alternative"
-                                id="reg-code"
+                                id="man-reg_code"
+                                name="man-reg_code"
                                 placeholder="Registration Code"
                                 type="text"
+                                onChange={this.handleManufacturerChange}
+                                value={
+                                  this.state.newProduct.manufacturer.reg_code
+                                }
                               />
                             </FormGroup>
                           </Col>
@@ -515,9 +693,21 @@ class CreateEntry extends React.Component {
                                 <ReactDatetime
                                   inputProps={{
                                     placeholder: "Date Picker Here",
-                                    id: "man-reg-year"
+                                    id: "man-reg_year",
+                                    name: "man-reg_year"
                                   }}
                                   timeFormat={false}
+                                  onChange={e =>
+                                    this.setState({
+                                      newProduct: {
+                                        ...this.state.newProduct,
+                                        manufacturer: {
+                                          ...this.state.newProduct.manufacturer,
+                                          reg_year: e.format("YYYY-MM-DD")
+                                        }
+                                      }
+                                    })
+                                  }
                                 />
                               </InputGroup>
                             </FormGroup>
@@ -535,7 +725,12 @@ class CreateEntry extends React.Component {
                                 placeholder="Manufacturer's address"
                                 rows="3"
                                 id="man-address"
+                                name="man-address"
                                 type="textarea"
+                                onChange={this.handleManufacturerChange}
+                                value={
+                                  this.state.newProduct.manufacturer.address
+                                }
                               />
                             </FormGroup>
                           </Col>
@@ -559,8 +754,7 @@ class CreateEntry extends React.Component {
                     <Col className="text-right" xs="4">
                       <Button
                         color="info"
-                        href="#pablo"
-                        onClick={e => e.preventDefault()}
+                        onClick={this.handleSubmitEntry}
                         size="sm"
                       >
                         Submit Entry
@@ -568,10 +762,7 @@ class CreateEntry extends React.Component {
                     </Col>
                   </Row>
                 </CardHeader>
-                <Table
-                  className="align-items-center table-flush"
-                  responsive
-                >
+                <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">
                     <tr>
                       <th scope="col">Product image</th>
@@ -583,61 +774,74 @@ class CreateEntry extends React.Component {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>
-                        <img
-                          style={{ width: 80, height: 80 }}
-                          alt="..."
-                          src="https://images.menswearhouse.com/is/image/TMW/MW40_57V0_23_JOSEPH_ABBOUD_VOYAGER_LT_BLUE_OVAL_SET?$40MainPDP$&fmt=webp"
-                        />
-                      </td>
-                      <td>Yoruba Book</td>
-                      <td>0012</td>
-                      <td>Eastern Illinois University</td>
-                      <td>Wears and Accesories</td>
-                      <td className="text-right">
-                        <UncontrolledDropdown>
-                          <DropdownToggle
-                            className="btn-icon-only text-light"
-                            href="#pablo"
-                            role="button"
-                            size="sm"
-                            color=""
-                            onClick={e => {
-                              e.preventDefault();
-                            }}
-                          >
-                            <i className="fas fa-ellipsis-v" />
-                          </DropdownToggle>
-                          <DropdownMenu
-                            className="dropdown-menu-arrow"
-                            right
-                          >
-                            <DropdownItem
-                              href="#pablo"
-                              onClick={e => {
-                                e.preventDefault();
-                                this.toggleModal("defaultModal");
+                    {this.state.products.map((product, id) => {
+                      return (
+                        <tr key={id}>
+                          <td>
+                            <img
+                              style={{
+                                width: 80,
+                                height: 80
                               }}
-                            >
-                              View
-                            </DropdownItem>
-                            <DropdownItem
-                              href="#pablo"
-                              onClick={e => e.preventDefault()}
-                            >
-                              Edit
-                            </DropdownItem>
-                            <DropdownItem
-                              href="#pablo"
-                              onClick={e => e.preventDefault()}
-                            >
-                              Delete
-                            </DropdownItem>
-                          </DropdownMenu>
-                        </UncontrolledDropdown>
-                      </td>
-                    </tr>
+                              alt="..."
+                              src={product.preview}
+                            />
+                          </td>
+                          <td>{product.name}</td>
+                          <td>{product.code}</td>
+                          <td>{product.manufacturer.name}</td>
+                          <td>
+                            {product.categories.map(item => (
+                              <span key={item.id} className="d-block">{`${
+                                item.name
+                              }`}</span>
+                            ))}
+                          </td>
+                          <td className="text-right">
+                            <UncontrolledDropdown>
+                              <DropdownToggle
+                                className="btn-icon-only text-light"
+                                href="#pablo"
+                                role="button"
+                                size="sm"
+                                color=""
+                                onClick={e => {
+                                  e.preventDefault();
+                                }}
+                              >
+                                <i className="fas fa-ellipsis-v" />
+                              </DropdownToggle>
+                              <DropdownMenu
+                                className="dropdown-menu-arrow"
+                                right
+                              >
+                                <DropdownItem
+                                  href="#pablo"
+                                  onClick={e => {
+                                    e.preventDefault();
+                                    this.toggleModal("defaultModal");
+                                  }}
+                                >
+                                  View
+                                </DropdownItem>
+                                <DropdownItem
+                                  href="#pablo"
+                                  onClick={e => e.preventDefault()}
+                                >
+                                  Edit
+                                </DropdownItem>
+                                <DropdownItem
+                                  href="#pablo"
+                                  onClick={e => e.preventDefault()}
+                                >
+                                  Delete
+                                </DropdownItem>
+                              </DropdownMenu>
+                            </UncontrolledDropdown>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </Table>
                 <CardFooter className="py-4">
@@ -702,4 +906,23 @@ class CreateEntry extends React.Component {
   }
 }
 
-export default CreateEntry;
+const mapStateToProps = state => {
+  return {
+    loading: state.entries.createLoading,
+    error: state.entries.createError,
+    success: state.entries.createSuccess
+  };
+};
+
+const mapDispatchToProps = {
+  createEntry
+};
+
+const CreateEntrywithReduxNToast = withToastManager(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(CreateEntry)
+);
+
+export default CreateEntrywithReduxNToast;

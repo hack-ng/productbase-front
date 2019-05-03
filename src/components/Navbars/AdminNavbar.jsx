@@ -18,6 +18,8 @@ import {
   Media
 } from "reactstrap";
 
+import { connect } from 'react-redux'
+
 class AdminNavbar extends React.Component {
   render() {
     return (
@@ -49,7 +51,7 @@ class AdminNavbar extends React.Component {
             <Nav className="align-items-center d-none d-md-flex" navbar>
               <Media className="ml-2 d-none d-lg-block">
                 <span className="mb-0 text-sm font-weight-bold text-white">
-                  Jessica Jones
+                  {this.props.user.username}
                 </span>
               </Media>
               {/* <UncontrolledDropdown nav>
@@ -106,4 +108,12 @@ class AdminNavbar extends React.Component {
   }
 }
 
-export default AdminNavbar;
+const mapStateToProps = state => {
+  return {
+    user: state.auth.user
+  }
+}
+
+const WithRedux = connect(mapStateToProps, null)(AdminNavbar)
+
+export default WithRedux;

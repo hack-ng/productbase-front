@@ -35,7 +35,7 @@ class ProductsTable extends Component {
                   <td>{product.name}</td>
                   <td>{product.code}</td>
                   <td>{product.manufacturer.name}</td>
-                  <td>{product.categories.map(item => (<span className="d-block">{`${item.name}`}</span>))}</td>
+                  <td>{product.categories.map(item => (<span key={item.id} className="d-block">{`${item.name}`}</span>))}</td>
                   <td className="text-right">
                     <Button
                       onClick={() => {
