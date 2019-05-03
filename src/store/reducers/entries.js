@@ -20,7 +20,12 @@ const initialState = {
   entries: null,
   newEntry: null,
   loading: false,
-  error: null
+  error: null,
+  // state that relate to actions once    
+  createLoading: false,
+  createError: null,
+  createSuccess: null,
+  message: null
 };
 
 const entriesReducer = (state = initialState, action) => {
@@ -49,21 +54,23 @@ const entriesReducer = (state = initialState, action) => {
     case CREATE_ENTRY_PENDING:
       return {
         ...state,
-        loading: true,
-        error: null
+        createLoading: true,
+        createError: null,
+        createSuccess: null
       };
 
     case CREATE_ENTRY_REJECTED:
       return {
         ...state,
-        loading: false,
-        error: true
+        createLoading: false,
+        createError: action.payload,
       };
 
     case CREATE_ENTRY_FULFILLED:
       return {
         ...state,
-        loading: false,
+        createLoading: false,
+        createSuccess: true,
       };
 
     case APPROVE_ENTRY_PENDING:

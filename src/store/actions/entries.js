@@ -13,8 +13,7 @@ import {
   /////////////////////////
   CREATE_ENTRY_PENDING,
   CREATE_ENTRY_REJECTED,
-  CREATE_ENTRY_FULFILLED,
-
+  CREATE_ENTRY_FULFILLED
 } from "./constants";
 
 import axios from "axios";
@@ -26,15 +25,15 @@ const fetchEntriesApi = `${BASE_URL}/api/entries`;
 const approveEntryApi = `${BASE_URL}/api/entries`;
 const rejectEntryApi = `${BASE_URL}/api/entries`;
 
-const fetchEntries = (token=null) => {
+const fetchEntries = (token = null) => {
   return async (dispatch, getState) => {
     dispatch(fetchEntriesPending());
     try {
-    const authToken = token || getState().auth.token
+      const authToken = token || getState().auth.token;
       let response = await axios.get(`${fetchEntriesApi}/`, {
         headers: { Authorization: `Token ${authToken}` }
       });
-      
+
       console.log(response);
       return dispatch(fetchEntriesFulfilled(response.data));
     } catch (e) {
@@ -56,32 +55,41 @@ const fetchEntriesFulfilled = entries => {
   return { type: FETCH_ENTRIES_FULFILLED, payload: entries };
 };
 
-
-
 ///////////////////////////////////////////////////////
-///////// CREATE ENTRY 
+///////// CREATE ENTRY
 
 const createEntry = (data, token = null) => {
   return async (dispatch, getState) => {
     dispatch(createEntryPending());
     try {
-          const authToken = token || getState().auth.token;
-          let response = await axios.post(`${entriesApi}/`, data, {
-            headers: {
-              Authorization: `Token ${authToken}`,
-              "Content-Type": "multipart/form-data"
-            }
-          });
+      const authToken = token || getState().auth.token;
+      let response = await axios.post(`${entriesApi}/`, data, {
+        headers: {
+          Authorization: `Token ${authToken}`,
+          "Content-Type": "multipart/form-data"
+        }
+      });
 
-          console.log(response);
+      console.log(response);
 
-          // update entries
-          await dispatch(fetchEntries());
+      // update entries
+      await dispatch(fetchEntries());
 
-          return dispatch(createEntryFulfilled(response.data));
-        } catch (e) {
-      console.log(e.response.data);
-      return dispatch(createEntryRejected());
+      return dispatch(createEntryFulfilled(response.data));
+    } catch (e) {
+      let messages = [];
+      if (e.response) {
+        const errors = e.response.data;
+
+        for (let key in errors) {
+          messages.push(errors[key][0]);
+          console.log("messages ==> ", messages);
+        }
+      } else {
+        console.log(e);
+        messages = ["An Error occured"];
+      }
+      return dispatch(createEntryRejected(messages));
     }
   };
 };
@@ -90,33 +98,34 @@ const createEntryPending = () => {
   return { type: CREATE_ENTRY_PENDING };
 };
 
-const createEntryRejected = () => {
-  return { type: CREATE_ENTRY_REJECTED };
+const createEntryRejected = (errorMsg) => {
+  return { type: CREATE_ENTRY_REJECTED, payload: errorMsg };
 };
 
 const createEntryFulfilled = entry => {
   return { type: CREATE_ENTRY_FULFILLED, payload: entry };
 };
 
-
 ///////////////////////////////////////////////////////
-///////// APPROVE ENTRY 
+///////// APPROVE ENTRY
 
 const approveEntry = (id, token = null) => {
   return async (dispatch, getState) => {
     dispatch(approveEntryPending());
     try {
       const authToken = token || getState().auth.token;
-      let response = await axios.patch(`${approveEntryApi}/${id}/`, 
-      { status: "approved" }
-      ,{
-        headers: { Authorization: `Token ${authToken}` }
-      });
+      let response = await axios.patch(
+        `${approveEntryApi}/${id}/`,
+        { status: "approved" },
+        {
+          headers: { Authorization: `Token ${authToken}` }
+        }
+      );
 
       console.log(response);
 
       // update entries
-      await dispatch( fetchEntries() )
+      await dispatch(fetchEntries());
 
       return dispatch(approveEntryFulfilled(response.data));
     } catch (e) {
@@ -138,30 +147,29 @@ const approveEntryFulfilled = entry => {
   return { type: APPROVE_ENTRY_FULFILLED, payload: entry };
 };
 
-
 ///////////////////////////////////////////////////////
-///////// REJECT ENTRY 
+///////// REJECT ENTRY
 
 const rejectEntry = (id, token = null) => {
   return async (dispatch, getState) => {
     dispatch(rejectEntryPending());
     try {
-          const authToken = token || getState().auth.token;
-          let response = await axios.patch(
-            `${rejectEntryApi}/${id}/`,
-            { status: "rejected" },
-            {
-              headers: { Authorization: `Token ${authToken}` }
-            }
-          );
+      const authToken = token || getState().auth.token;
+      let response = await axios.patch(
+        `${rejectEntryApi}/${id}/`,
+        { status: "rejected" },
+        {
+          headers: { Authorization: `Token ${authToken}` }
+        }
+      );
 
-          console.log(response);
+      console.log(response);
 
-          // update entries
-          await dispatch(fetchEntries());
+      // update entries
+      await dispatch(fetchEntries());
 
-          return dispatch(rejectEntryFulfilled(response.data));
-        } catch (e) {
+      return dispatch(rejectEntryFulfilled(response.data));
+    } catch (e) {
       console.log(e.response.data);
       return dispatch(rejectEntryRejected());
     }
@@ -179,7 +187,5 @@ const rejectEntryRejected = () => {
 const rejectEntryFulfilled = entry => {
   return { type: REJECT_ENTRY_FULFILLED, payload: entry };
 };
-
-
 
 export { fetchEntries, createEntry, approveEntry, rejectEntry };

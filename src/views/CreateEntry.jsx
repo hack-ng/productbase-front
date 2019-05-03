@@ -30,9 +30,12 @@ import {
 // core components
 import Select from "react-select";
 import Header from "../components/Headers/Header.jsx";
+import Loader from "../components/Loader"
 
-import { connect } from 'react-redux'
-import { createEntry } from "../store/actions/entries"
+
+import { connect } from "react-redux";
+import { withToastManager } from "react-toast-notifications";
+import { createEntry } from "../store/actions/entries";
 
 const categories = [
   { value: "chocolate", label: "App and Games" },
@@ -142,17 +145,37 @@ class CreateEntry extends React.Component {
   };
 
   handleSubmitEntry = async () => {
-    const products = this.state.products
-    let formData = new FormData()
-    for (let index in products){
-      let product = products[index]
-      delete product.preview
-      formData.append(`product_${index}`, JSON.stringify(product))
-      formData.append(`product_${index}_image`, product.image)
+    const { products } = this.state;
+    let formData = new FormData();
+    for (let index in products) {
+      let product = products[index];
+      delete product.preview;
+    
+
+      formData.append(`product_${index}`, JSON.stringify(product));
+      formData.append(`product_${index}_image`, product.image);
+    }
+    const { toastManager } = this.props;
+
+    await this.props.createEntry(formData);
+
+    if (this.props.error) {
+      for (let x of this.props.error) {
+        toastManager.add(`Something went wrong: "${x}"`, {
+          appearance: "error",
+          autoDismiss: true
+        });
+      }
+      return;
     }
 
-    await this.props.createEntry(formData)
-  }
+    if (this.props.success) {
+      await toastManager.add(`Created Entry successfully"`, {
+        appearance: "success",
+        autoDismiss: true
+      });
+    }
+  };
 
   renderModal = () => {
     return (
@@ -287,13 +310,12 @@ class CreateEntry extends React.Component {
     );
   };
 
-  
-
   render() {
     return (
       <React.Fragment>
         <Header hideSummary={true} />
         {/* Page content */}
+        {this.props.loading ? <Loader />: null}
         <Container className="mt--7" fluid>
           <Row className="mb-5">
             <Col xl="10">
@@ -886,14 +908,21 @@ class CreateEntry extends React.Component {
 
 const mapStateToProps = state => {
   return {
-
-  }
-}
+    loading: state.entries.createLoading,
+    error: state.entries.createError,
+    success: state.entries.createSuccess
+  };
+};
 
 const mapDispatchToProps = {
   createEntry
-}
+};
 
-const CreateEntrywithRedux = connect(mapStateToProps, mapDispatchToProps)(CreateEntry)
+const CreateEntrywithReduxNToast = withToastManager(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(CreateEntry)
+);
 
-export default CreateEntrywithRedux;
+export default CreateEntrywithReduxNToast;
