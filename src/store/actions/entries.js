@@ -13,7 +13,11 @@ import {
   /////////////////////////
   CREATE_ENTRY_PENDING,
   CREATE_ENTRY_REJECTED,
-  CREATE_ENTRY_FULFILLED
+  CREATE_ENTRY_FULFILLED,
+  /////////////////////////
+  UPLOAD_CSV_PENDING,
+  UPLOAD_CSV_REJECTED,
+  UPLOAD_CSV_FULFILLED,
 } from "./constants";
 
 import axios from "axios";
@@ -24,6 +28,8 @@ const entriesApi = `${BASE_URL}/api/entries`;
 const fetchEntriesApi = `${BASE_URL}/api/entries`;
 const approveEntryApi = `${BASE_URL}/api/entries`;
 const rejectEntryApi = `${BASE_URL}/api/entries`;
+
+const uploadCSVApi = `${BASE_URL}/api/upload-csv`;
 
 const fetchEntries = (token = null) => {
   return async (dispatch, getState) => {
@@ -104,6 +110,58 @@ const createEntryRejected = (errorMsg) => {
 
 const createEntryFulfilled = entry => {
   return { type: CREATE_ENTRY_FULFILLED, payload: entry };
+};
+
+
+///////////////////////////////////////////////////////
+///////// UPLOAD ENTRY CSV
+
+const uploadCSV = (data, token = null) => {
+  return async (dispatch, getState) => {
+    dispatch(uploadCSVPending());
+    try {
+      const authToken = token || getState().auth.token;
+      let response = await axios.post(`${uploadCSVApi}/`, data, {
+        headers: {
+          Authorization: `Token ${authToken}`,
+          "Content-Type": "multipart/form-data"
+        }
+      });
+
+      console.log('upload action',  response);
+
+      // update entries
+      await dispatch(fetchEntries());
+
+      return dispatch(uploadCSVFulfilled(response.data));
+    } catch (e) {
+      let messages = [];
+      if (e.response) {
+        const errors = e.response.data;
+
+        for (let key in errors) {
+          messages.push(errors[key][0]);
+          console.log("messages ==> ", messages);
+        }
+      } else {
+        console.log(e);
+        messages = ["An Error occured"];
+      }
+      return dispatch(uploadCSVRejected(messages));
+    }
+  };
+};
+
+const uploadCSVPending = () => {
+  return { type: UPLOAD_CSV_PENDING };
+};
+
+const uploadCSVRejected = (errorMsg) => {
+  return { type: UPLOAD_CSV_REJECTED, payload: errorMsg };
+};
+
+const uploadCSVFulfilled = entry => {
+  return { type: UPLOAD_CSV_FULFILLED, payload: entry };
 };
 
 ///////////////////////////////////////////////////////
@@ -188,4 +246,4 @@ const rejectEntryFulfilled = entry => {
   return { type: REJECT_ENTRY_FULFILLED, payload: entry };
 };
 
-export { fetchEntries, createEntry, approveEntry, rejectEntry };
+export { fetchEntries, createEntry, uploadCSV, approveEntry, rejectEntry };

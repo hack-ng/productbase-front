@@ -13,7 +13,11 @@ import {
   /////////////////////////
   CREATE_ENTRY_PENDING,
   CREATE_ENTRY_REJECTED,
-  CREATE_ENTRY_FULFILLED
+  CREATE_ENTRY_FULFILLED,
+  /////////////////////////
+  UPLOAD_CSV_PENDING,
+  UPLOAD_CSV_REJECTED,
+  UPLOAD_CSV_FULFILLED,
 } from "../actions/constants";
 
 const initialState = {
@@ -21,10 +25,15 @@ const initialState = {
   newEntry: null,
   loading: false,
   error: null,
-  // state that relate to actions once    
+  // state that relate to create action
   createLoading: false,
   createError: null,
   createSuccess: null,
+  // state that relate to upload action
+  uploadLoading: false,
+  uploadError: null,
+  uploadSuccess: null,
+
   message: null
 };
 
@@ -56,21 +65,52 @@ const entriesReducer = (state = initialState, action) => {
         ...state,
         createLoading: true,
         createError: null,
-        createSuccess: null
+        createSuccess: null,
+        uploadLoading: null,
+        uploadError: null,
+        uploadSuccess: null
       };
 
     case CREATE_ENTRY_REJECTED:
       return {
         ...state,
         createLoading: false,
-        createError: action.payload,
+        createError: action.payload
       };
 
     case CREATE_ENTRY_FULFILLED:
       return {
         ...state,
         createLoading: false,
-        createSuccess: true,
+        createSuccess: true
+      };
+
+    case UPLOAD_CSV_PENDING:
+      return {
+        ...state,
+        createLoading: null,
+        createError: null,
+        createSuccess: null,
+        uploadLoading: true,
+        uploadError: null,
+        uploadSuccess: null
+      };
+
+    case UPLOAD_CSV_REJECTED:
+      return {
+        ...state,
+        uploadLoading: false,
+        uploadError: action.payload
+      };
+
+    case UPLOAD_CSV_FULFILLED:
+     console.log('upload csv ==> ',action.payload)
+      const { products_count } = action.payload
+      return {
+        ...state,
+        uploadLoading: false,
+        uploadSuccess: true,
+        message: `Success, Entry with ${products_count} products created!`
       };
 
     case APPROVE_ENTRY_PENDING:
