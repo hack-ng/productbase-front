@@ -30,12 +30,11 @@ import {
 // core components
 import Select from "react-select";
 import Header from "../components/Headers/Header.jsx";
-import Loader from "../components/Loader"
-
+import Loader from "../components/Loader";
 
 import { connect } from "react-redux";
 import { withToastManager } from "react-toast-notifications";
-import { createEntry } from "../store/actions/entries";
+import { createEntry, uploadCSV } from "../store/actions/entries";
 
 const categories = [
   { value: "chocolate", label: "App and Games" },
@@ -69,7 +68,48 @@ class CreateEntry extends React.Component {
         address: ""
       }
     },
+    file: null,
     products: []
+  };
+
+  handleCSVChange = e => {
+    this.setState({
+      file: e.target.files[0]
+    });
+  };
+
+  handleCSVSubmit = async () => {
+      const {toastManager} = this.props
+      const { file } = this.state
+
+      if (!file){
+        return toastManager.add(`You have to upload a csv file`, {
+          appearance: "error",
+          autoDismiss: true
+        });
+      }
+
+      let formData = new FormData()
+      formData.append('file', this.state.file)
+
+      await this.props.uploadCSV(formData)
+
+      if (this.props.error) {
+        for (let x of this.props.error) {
+          toastManager.add(`Something went wrong: "${x}"`, {
+            appearance: "error",
+            autoDismiss: true
+          });
+        }
+        return;
+      }
+
+      if (this.props.success) {
+        await toastManager.add(`${this.props.message}`, {
+          appearance: "success",
+          autoDismiss: true
+        });
+      }
   };
 
   handleImageChange = e => {
@@ -150,7 +190,6 @@ class CreateEntry extends React.Component {
     for (let index in products) {
       let product = products[index];
       delete product.preview;
-    
 
       formData.append(`product_${index}`, JSON.stringify(product));
       formData.append(`product_${index}_image`, product.image);
@@ -315,20 +354,27 @@ class CreateEntry extends React.Component {
       <React.Fragment>
         <Header hideSummary={true} />
         {/* Page content */}
-        {this.props.loading ? <Loader />: null}
+        {this.props.loading ? <Loader /> : null}
         <Container className="mt--7" fluid>
           <Row className="mb-5">
             <Col xl="10">
               <Card className="bg-secondary shadow">
-                <CardHeader
-                  onClick={this.toggleAddForm}
-                  className="bg-white border-0"
-                >
+                <CardHeader className="bg-white border-0">
                   <Row className="align-items-center">
                     <Col className="">
                       <h3 className="mb-2">Upload Spreadsheet</h3>
-                      <Input type="file" className="mb-4" />
-                      <Button color="primary" size="sm">
+                      <Input
+                        name="file"
+                        onChange={this.handleCSVChange}
+                        type="file"
+                        accept=".csv"
+                      />
+                      <Button
+                        onClick={this.handleCSVSubmit}
+                        className="mt-4"
+                        color="primary"
+                        size="sm"
+                      >
                         Upload
                       </Button>
                     </Col>
@@ -348,16 +394,6 @@ class CreateEntry extends React.Component {
                     <Col xs="8">
                       <h3 className="mb-0">Add Product manually</h3>
                     </Col>
-                    {/* <Col className="text-right" xs="4">
-                      <Button
-                        color="primary"
-                        href="#pablo"
-                        onClick={e => e.preventDefault()}
-                        size="sm"
-                      >
-                        Add
-                      </Button>
-                    </Col> */}
                   </Row>
                 </CardHeader>
                 <Collapse isOpen={this.state.showAddForm}>
@@ -519,6 +555,7 @@ class CreateEntry extends React.Component {
                                 className="form-control-alternative"
                                 id="product-image"
                                 name="image"
+                                ref={ref => (this.fileInput = ref)}
                                 type="file"
                                 onChange={this.handleImageChange}
                                 required
@@ -907,15 +944,26 @@ class CreateEntry extends React.Component {
 }
 
 const mapStateToProps = state => {
+  const {
+    createLoading,
+    createError,
+    createSuccess,
+    uploadLoading,
+    uploadError,
+    uploadSuccess,
+    message
+  } = state.entries;
   return {
-    loading: state.entries.createLoading,
-    error: state.entries.createError,
-    success: state.entries.createSuccess
+    loading: createLoading || uploadLoading,
+    error: createError || uploadError,
+    success: createSuccess || uploadSuccess,
+    message: message
   };
 };
 
 const mapDispatchToProps = {
-  createEntry
+  createEntry,
+  uploadCSV
 };
 
 const CreateEntrywithReduxNToast = withToastManager(
